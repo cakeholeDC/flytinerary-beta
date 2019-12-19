@@ -1,14 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>🛫Flytinerary🛬</title>
+	<script src="src/main.js"></script>
 	<!-- SEMANTIC -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 	<!-- MATERIALIZE -->
 	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+	<title>🛫 ~Flytinerary~ 🛬</title>
 </head>
 <body>
-	<h1>Welcome to 🛫Flytinerary🛬</h1>
+	<!-- Page Contents -->
+	<div class="container">
+	  <div class="ui inverted vertical masthead center aligned segment">
 
+	    <div class="ui large text container">
+	      	<h1 class="ui inverted header">
+				Welcome to 🛫 Flytinerary 🛬
+	      	</h1>
+	      	<h2>Where are you headed?</h2>
+	      	<div class="ui search">
+			 	<div class="ui icon input">
+					<input id="trip-search" class="prompt" type="text" placeholder="Paris, France">
+					<i class="search icon"></i>
+				</div>
+				<h2> </h2>
+				<!-- <div class="results"></div> -->
+			</div>
+	      <!-- <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div> -->
+	    </div>
+
+	  </div>
+
+	  <div class="ui vertical stripe segment">
+	    <div class="ui middle aligned stackable grid container">
+	      <div class="row">
+	        <div id="main-column" class="center aligned column">
+	          <h2 class="ui header">Upcoming Trips:</h2>
+	          <div class="ui cards stackable centered" id="trip-container">
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+	<div class="ui dimmer modals page transition hidden" id="modals-div">
+		<div class="ui standard test modal transition hidden" id="new-trip-modal">
+			<div class="header centered">New Trip</div>
+		</div>
+	</div>
 </body>
 </html>
