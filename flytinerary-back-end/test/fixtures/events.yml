@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  start: 2019-12-19 10:54:57
+  end: 2019-12-19 10:54:57
+  description: MyText
+  trip: one
+  traveller: one
+
+two:
+  type: 
+  start: 2019-12-19 10:54:57
+  end: 2019-12-19 10:54:57
+  description: MyText
+  trip: two
+  traveller: two

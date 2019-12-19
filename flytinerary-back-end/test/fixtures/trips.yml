@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nickname: MyString
+  destination: MyString
+  start_date: 2019-12-19 10:52:40
+  end_date: 2019-12-19 10:52:40
+  organizer_id: 1
+  image: MyString
+
+two:
+  nickname: MyString
+  destination: MyString
+  start_date: 2019-12-19 10:52:40
+  end_date: 2019-12-19 10:52:40
+  organizer_id: 1
+  image: MyString
