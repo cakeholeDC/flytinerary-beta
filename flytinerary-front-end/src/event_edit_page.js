@@ -71,8 +71,10 @@ function buildTableRow(activity) {
     traveller.innerText = activity.traveller_name.name
     const event = document.createElement('td')
     event.innerText = activity.event_type
+
     const details = document.createElement('td')
     details.innerText = activity.description
+    
     const start_date = document.createElement('td')
     start_date.innerText = formatDateTime(activity.start)
     const end_date = document.createElement('td')
