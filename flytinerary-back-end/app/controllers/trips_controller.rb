@@ -3,14 +3,14 @@ class TripsController < ApplicationController
 	def index
 		trips = Trip.all
 		render json: trips.to_json(
-				except: [:traveller_id, :updated_at],
+				except: [:traveller_id, :updated_at, :created_at],
 				include: [
 					organizer: { only: :name} ,
 					# travellers: {except: [:created_at, :updated_at]},
-					attendees: {except: [:created_at, :updated_at]},
+					attendees: {except: [:created_at, :updated_at, :id]},
 					events: {
-						include: :traveller_name,
-						except: [:created_at, :updated_at]
+						include: [traveller_name: { only: :name}],
+						except: [:created_at, :updated_at, :traveller_id, :trip_id]
 					}
 				]
 			)
@@ -19,12 +19,15 @@ class TripsController < ApplicationController
 	def show
 		trip = Trip.find(params[:id])
 		render json: trip.to_json(
-				except: [:traveller_id, :updated_at],
+				except: [:traveller_id, :updated_at, :created_at],
 				include: [
 					organizer: { only: :name} ,
 					# travellers: {except: [:created_at, :updated_at]},
-					attendees: {except: [:created_at, :updated_at]},
-					event_timeline: {except: [:created_at, :updated_at]}
+					attendees: {except: [:created_at, :updated_at, :id]},
+					event_timeline: {
+						include: [traveller_name: { only: :name}],
+						except: [:created_at, :updated_at, :traveller_id, :trip_id, :id]
+					}
 				]
 			)
 	end
