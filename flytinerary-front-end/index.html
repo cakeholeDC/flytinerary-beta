@@ -2,6 +2,9 @@
 <html>
 <head>
 	<script src="src/main.js"></script>
+	<script src="src/helpers.js"></script>
+	<script src="src/event_edit_page.js"></script>
+	<script src="src/trip_show_page.js"></script>
 	<!-- SEMANTIC -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 	<!-- MATERIALIZE -->
@@ -14,7 +17,7 @@
 	  <div class="ui inverted vertical masthead center aligned segment">
 
 	    <div class="ui large text container">
-	      	<h1 class="ui inverted header">
+	      	<h1 class="ui inverted header" id="return-home">
 				Welcome to 🛫 Flytinerary 🛬
 	      	</h1>
 	      	<h2>Where are you headed?</h2>
@@ -26,7 +29,6 @@
 				<h2> </h2>
 				<!-- <div class="results"></div> -->
 			</div>
-	      <!-- <div class="ui huge primary button">Get Started <i class="right arrow icon"></i></div> -->
 	    </div>
 
 	  </div>
@@ -35,18 +37,9 @@
 	    <div class="ui middle aligned stackable grid container">
 	      <div class="row">
 	        <div id="main-column" class="center aligned column">
-	          <h2 class="ui header">Upcoming Trips:</h2>
-	          <div class="ui cards stackable centered" id="trip-container">
-	          </div>
 	        </div>
 	      </div>
 	    </div>
 	  </div>
-
-	<div class="ui dimmer modals page transition hidden" id="modals-div">
-		<div class="ui standard test modal transition hidden" id="new-trip-modal">
-			<div class="header centered">New Trip</div>
-		</div>
-	</div>
 </body>
 </html>
