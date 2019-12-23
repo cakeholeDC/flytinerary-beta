@@ -40,6 +40,7 @@ function renderEvents(trip) {
 	tripDetails.append(tripDestination, tripDates, tripAttendees)
 
   let eventTable = createWithClasses('table', 'ui', 'striped', 'table')
+  eventTable.id = 'event-table'
   eventTable.innerHTML = `
     <thead>
       <tr>
@@ -52,6 +53,7 @@ function renderEvents(trip) {
     </thead>`
 
     const tableBody = document.createElement('tbody')
+    tableBody.id = 'event-table-body'
     eventTable.appendChild(tableBody)
 
     trip.event_timeline.forEach(activity => {
