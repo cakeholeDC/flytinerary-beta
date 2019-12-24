@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function attachEventListeners() {
 	document.querySelector('#trip-search').addEventListener('keypress', searchTrip)
-	document.querySelector('#return-home').addEventListener('click', () => location.reload())
+	document.querySelector('#site-header').addEventListener('click', () => location.reload())
 }
 
 function getTrips() {
@@ -28,6 +28,17 @@ function getTrips() {
 			trips.forEach(renderTrip)
 		})
 		.catch(error => console.log(error.message))
+}
+
+function clearHeaderContainer() {
+	const headerContainer = document.querySelector('#main-column')
+	headerContainer.innerHTML = ''
+}
+
+function clearMainContainer() {
+	const mainContainer = document.querySelector('#main-column')
+	mainContainer.innerHTML = ''
+	return mainContainer
 }
 
 function addCurrentTripsHeader() {

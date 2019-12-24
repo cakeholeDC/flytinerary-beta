@@ -1,13 +1,15 @@
 function loadEventPage(event) {
 	const tripID = event.currentTarget.id.split('-')[1]
-	steppedTripContainer()
+	steppedTripContainer() //loads the stepped interface, all disabled
 	const currentStep = document.querySelector('#step-trip-events')
 	currentStep.classList.remove('disabled')
 	currentStep.classList.add('active')
 
-	getTripEventData(tripID)
+  // getTripEventData(tripID)
+	getTripData(tripID)
 }
 
+//duplicate function. REFACTOR
 function getTripEventData(trip_id) {
 	fetch(`${TRIPS_URL}/${trip_id}`)
 		.then(response => {
