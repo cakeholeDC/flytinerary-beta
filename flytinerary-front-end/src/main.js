@@ -97,7 +97,8 @@ function renderTrip(trip) {
 	const bottomBtn = createWithClasses('div', 'ui', 'bottom', 'attached', 'button')
 	bottomBtn.id = `trip-${trip.id}`
 	bottomBtn.addEventListener('click', loadEventPage)
-	bottomBtn.innerHTML = `<i class="add icon"></i>Add Events`
+	// bottomBtn.innerHTML = `<i class="add icon"></i>Add Events`
+	bottomBtn.innerHTML = `<i class="calendar alternate icon"></i>View Flytinerary`
 
     card.append(cardImage, cardBody, cardFooter, bottomBtn)
 

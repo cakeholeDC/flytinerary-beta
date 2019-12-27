@@ -11,7 +11,8 @@ function getTripData(trip_id) {
 }
 
 function parseTripEvents(trip) {
-	const agenda = createWithClasses('ul', 'list')
+	const agenda = createWithClasses('div','list')
+	agenda.id = "trip-agenda"
 
 	let agendaDate = '' // determines date uniqueness
 	let eventsContainer = '' // assigns the UL for each date
@@ -26,14 +27,15 @@ function parseTripEvents(trip) {
 		if (agendaDate === '' || agendaDate !== eventDate) {
 			agendaDate = eventDate
 
-			const eventDateHeader = createWithClasses('li','header')
-			eventDateHeader.innerText = agendaDate
+			const eventDateHeader = createWithClasses('h1','header','large')
+			eventDateHeader.innerText = `${agendaDate}` //${event.start.getDay()} 
 				// set the container for the event details
-				const events = createWithClasses('ul', 'list')
+				const events = createWithClasses('ul', 'content','list')
 				eventsContainer = events
-				eventDateHeader.appendChild(events)
+				// eventDateHeader.appendChild(events)
 
 			agenda.appendChild(eventDateHeader)
+				agenda.appendChild(events)
 		}
 
 		// then show event by time
@@ -55,6 +57,7 @@ function buildAgenda(trip) {
 	const mainContainer = clearMainContainer()
 	mainContainer.classList.remove('center')
 	mainContainer.classList.add('left')
+	mainContainer.classList.add('ui','segment')
 
 	const siteHeader = document.querySelector('#site-header')
 	siteHeader.innerText = trip.nickname
@@ -65,6 +68,21 @@ function buildAgenda(trip) {
 	document.querySelector('#search-container').innerHTML = `<i class="plane icon"></i>
 				${trip.attendees.length} Travellers`
 
-	mainContainer.appendChild(parseTripEvents(trip))
+	const headerContainer = createWithClasses('div','ui','large','header','center','aligned')
+	headerContainer.innerText = "Itinerary"
 
+	const createEventBtn = createWithClasses('button','ui','button','right','float')
+	createEventBtn.innerText = "Add Event"
+	createEventBtn.addEventListener('click', buildNewEventForm)
+	headerContainer.appendChild(createEventBtn)
+	
+	mainContainer.append(headerContainer, parseTripEvents(trip))
+
+}
+
+function buildNewEventForm(event) {
+	console.log("Adding Event")
+
+	let agenda = document.querySelector('#trip-agenda')
+	
 }
