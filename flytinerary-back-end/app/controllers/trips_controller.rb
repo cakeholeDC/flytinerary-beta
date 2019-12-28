@@ -35,7 +35,7 @@ class TripsController < ApplicationController
 	def create
 
 		start_date = Trip.parseDateString(params[:start_date])
-		end_date = Trip.parseDateString(params[:start_date])
+		end_date = Trip.parseDateString(params[:end_date])
 
 		Trip.create(
 			nickname: params[:nickname], 

@@ -182,13 +182,16 @@ function valdateEventForm(form) {
 function createNewEvent(body) {
 	const eventConfig = fetchConfig(body, "POST")
 
-	fetch(`${EVENTS_URL}`, eventConfig)
+	fetch(EVENTS_URL, eventConfig)
 		.then(response => {
 			if (response.ok){
-				return response.json
+				return response.json()
 			}
 		})
-		.then(event => loadAgendaPage(event.trip_id))
+		.then(json => {
+			debugger
+			console.log(json.trip_id)
+		})
 		.catch(error => `!!!${error.message}`)
 	// body...
 }
