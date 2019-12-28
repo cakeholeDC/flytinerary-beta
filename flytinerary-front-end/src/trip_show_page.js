@@ -10,6 +10,38 @@ function getTripData(trip_id) {
 		.catch(error => console.log(error.message))
 }
 
+function loadAgendaPage(trip) {
+
+	const mainContainer = clearMainContainer()
+	mainContainer.classList.remove('center')
+	mainContainer.classList.add('left')
+	mainContainer.classList.add('ui','segment')
+
+	const siteHeader = document.querySelector('#site-header')
+	siteHeader.innerText = trip.nickname
+
+	const subHeader = document.querySelector('#site-sub-header')
+	subHeader.innerText = `${trip.destination}: ${formatDate(trip.start_date)} — ${formatDate(trip.end_date)}`
+
+	document.querySelector('#search-container').innerHTML = `<i class="plane icon"></i>
+				${trip.attendees.length} Travellers`
+
+	const headerContainer = createWithClasses('div','ui','large','header','center','aligned')
+	
+	const header = createWithClasses('div','ui','medium','header','center','aligned')
+	header.innerText = "Flytinerary"
+	header.id = 'trip-agenda-header'
+
+	const createEventBtn = createWithClasses('button','ui','button','right','floated')
+	createEventBtn.innerText = "Add Event"
+	createEventBtn.id = "new-event-button"
+	createEventBtn.addEventListener('click', buildNewEventForm)
+	headerContainer.append(header, createEventBtn)
+	
+	mainContainer.append(headerContainer, buildAgendaTimeline(trip))
+
+}
+
 function buildAgendaTimeline(trip) {
 	const agenda = createWithClasses('div','list')
 	agenda.id = `trip-${trip.id}-agenda`
@@ -52,39 +84,9 @@ function buildAgendaTimeline(trip) {
 	return agenda
 }
 
-
-function loadAgendaPage(trip) {
-
-	const mainContainer = clearMainContainer()
-	mainContainer.classList.remove('center')
-	mainContainer.classList.add('left')
-	mainContainer.classList.add('ui','segment')
-
-	const siteHeader = document.querySelector('#site-header')
-	siteHeader.innerText = trip.nickname
-
-	const subHeader = document.querySelector('#site-sub-header')
-	subHeader.innerText = `${trip.destination}: ${formatDate(trip.start_date)} — ${formatDate(trip.end_date)}`
-
-	document.querySelector('#search-container').innerHTML = `<i class="plane icon"></i>
-				${trip.attendees.length} Travellers`
-
-	const headerContainer = createWithClasses('div','ui','large','header','center','aligned')
-	headerContainer.innerText = "Itinerary"
-	headerContainer.id = 'trip-agenda-header'
-
-	const createEventBtn = createWithClasses('button','ui','button','right','floated')
-	createEventBtn.innerText = "Add Event"
-	createEventBtn.id = "new-event-button"
-	createEventBtn.addEventListener('click', buildNewEventForm)
-	headerContainer.appendChild(createEventBtn)
-	
-	mainContainer.append(headerContainer, buildAgendaTimeline(trip))
-
-}
-
 function buildNewEventForm(event) {
 	console.log("Adding Event")
+	document.querySelector('#trip-agenda-header').innerText = "Add Flytinerary Item"
 	document.querySelector("#new-event-button").style.display = "none"
 
 	let agenda = document.querySelector('#main-column .list')
@@ -121,7 +123,9 @@ function buildNewEventForm(event) {
 			const tripDates = document.querySelector('#site-sub-header').innerText.split(':')
 
 			const tripStart = new Date(tripDates[1].split('—')[0].trim())
+			console.log(`tripStart = ${tripStart}`)
 			const tripEnd = new Date(tripDates[1].split('—')[1].trim())
+			console.log(`tripEnd = ${tripEnd}`)
 
 			const start_end = createWithClasses('div','two','fields')
 			  const start = createFormInputLabel('Event Start', "datetime-local", "start", '', prefillDateTime(tripStart)) //@TODO rework function to accept string
@@ -188,9 +192,8 @@ function createNewEvent(body) {
 				return response.json()
 			}
 		})
-		.then(json => {
-			debugger
-			console.log(json.trip_id)
+		.then(event => {
+			getTripData(event.trip_id)
 		})
 		.catch(error => `!!!${error.message}`)
 	// body...

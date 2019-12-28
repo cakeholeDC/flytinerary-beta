@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function attachEventListeners() {
 	document.querySelector('#trip-search').addEventListener('keypress', searchTrip)
-	document.querySelector('#site-header').addEventListener('click', () => location.reload())
+	document.querySelector('#site-header').addEventListener('click', () => getTrips())
 }
 
 function getTrips() {

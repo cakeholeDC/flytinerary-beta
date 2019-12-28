@@ -47,14 +47,20 @@ function prefillDateTime(datetime, offset) {
 
 	const humanTime = hours + ':' + minutes
 	
+	let month = date.getMonth() + 1
+	let day = date.getDate()
 	const year = date.getFullYear()
-	const month = date.getMonth() + 1
-	const day = date.getDate()
-	
+
+	if (month.toString().length === 1) {
+		month = `0${month}`
+	}
+	if (day.toString().length === 1) {
+		day = `0${day}`
+	}
+	//"2019-12-31T10:00"
 	return `${year}-${month}-${day}T${humanTime}`;
 }
 
-//"2019-12-31T10:00"
 
 function getEventTime(datetime) {
 	const date = new Date(Date.parse(datetime))

@@ -1,9 +1,9 @@
 function loadEventPage(event) {
 	const tripID = event.currentTarget.id.split('-')[1]
-	steppedTripContainer() //loads the stepped interface, all disabled
-	const currentStep = document.querySelector('#step-trip-events')
-	currentStep.classList.remove('disabled')
-	currentStep.classList.add('active')
+	// steppedTripContainer() //loads the stepped interface, all disabled
+	// const currentStep = document.querySelector('#step-trip-events')
+	// currentStep.classList.remove('disabled')
+	// currentStep.classList.add('active')
 
   // getTripEventData(tripID)
 	getTripData(tripID)
