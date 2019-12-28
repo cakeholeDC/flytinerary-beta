@@ -40,6 +40,22 @@ function formatDateTime(datetime) {
 	return `${month}/${day}/${year} at ${humanTime}`;
 }
 
+function prefillDateTime(datetime, offset) {
+	const date = new Date(Date.parse(datetime))
+	const hours = !offset ? '08' : '16' ;
+	const minutes = '00';
+
+	const humanTime = hours + ':' + minutes
+	
+	const year = date.getFullYear()
+	const month = date.getMonth() + 1
+	const day = date.getDate()
+	
+	return `${year}-${month}-${day}T${humanTime}`;
+}
+
+//"2019-12-31T10:00"
+
 function getEventTime(datetime) {
 	const date = new Date(Date.parse(datetime))
 	let hours = date.getHours();

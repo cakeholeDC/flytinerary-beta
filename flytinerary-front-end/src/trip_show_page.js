@@ -124,26 +124,20 @@ function buildNewEventForm(event) {
 			const tripEnd = new Date(tripDates[1].split('—')[1].trim())
 
 			const start_end = createWithClasses('div','two','fields')
-			  const start = createFormInputLabel('Event Start', "date", "start", '', prefillDate(tripStart)) //@TODO rework function to accept string
-			  const end = createFormInputLabel('Event End', "date", "end", '', prefillDate(tripEnd))
+			  const start = createFormInputLabel('Event Start', "datetime-local", "start", '', prefillDateTime(tripStart)) //@TODO rework function to accept string
+			  const end = createFormInputLabel('Event End', "datetime-local", "end", '', prefillDateTime(tripEnd, true))
 
 			start_end.append(start, end)
 		dates.appendChild(start_end)
 
-		// THIS NEEDS A DIV FIELD!!!! 
-		// createWithClasses('div','field')
 		const description = createWithClasses('div', 'field')
 		  const descLabel = document.createElement('label')
 			descLabel.innerText = "Description"
 		  const descArea = document.createElement('textarea')
 			descArea.rows = 2
 			descArea.name = "description"
-			descArea.placeholder = "Lorem ipsum dolor a mi..."
+			descArea.placeholder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nulla..."
 		description.append(descLabel, descArea)
-
-		// const description = createFormInputLabel("Description", "text", "description", "Lorem ipsum dolor a mi...")
-			// description.innerHTML += '<textarea rows="2"></textarea>'
-
 
 		let submit = createWithClasses('button', 'ui','button', 'right','floated')
 		submit.innerText = "Create Event"
@@ -176,8 +170,25 @@ function processNewEvent(event) {
     	traveller_id: SESSION_USER
 	}
 
-	debugger
-
+	createNewEvent(newEventBody)
 	document.querySelector("#new-event-button").style.display = "inline-block"
 
+}
+
+function valdateEventForm(form) {
+	let validForm = form
+}
+
+function createNewEvent(body) {
+	const eventConfig = fetchConfig(body, "POST")
+
+	fetch(`${EVENTS_URL}`, eventConfig)
+		.then(response => {
+			if (response.ok){
+				return response.json
+			}
+		})
+		.then(event => loadAgendaPage(event.trip_id))
+		.catch(error => `!!!${error.message}`)
+	// body...
 }
