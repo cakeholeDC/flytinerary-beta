@@ -1,43 +1,27 @@
 <!DOCTYPE html>
-<html>
 <head>
+<html>
 	<script src="src/main.js"></script>
 	<script src="src/helpers.js"></script>
+	<script src="src/trips.js"></script>
 	<script src="src/travellers.js"></script>
 	<script src="src/events.js"></script>
 	<!-- SEMANTIC -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+	<link rel="stylesheet" href="styles.css">
 	<!-- MATERIALIZE -->
 	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
 	<title>🛫 ~Flytinerary~ 🛬</title>
 </head>
 <body>
-	<!-- NAV BAR -->
-	<!-- <div class="ui menu container">
-	  <div class="item">
-	    <div class="ui primary button">Home</div>
-	  </div>
-	  <div class="item">
-	    <div class="ui button">Log-in</div>
-	  </div>
-	</div> -->
 	<!-- Page Contents -->
-	<div class="container">
-	  <div class="ui inverted vertical masthead center aligned segment">
-
-	    <div class="ui large text container">
-	      	<h1 class="ui inverted header" id="site-header">
-				Welcome to 🛫 Flytinerary 🛬
+	<div class="page">
+	  <div class="ui inverted vertical center aligned segment" id="header-bar">
+	    <div class="ui large text container" id="header-container">
+	      	<h1 class="ui inverted header" id="header-text">
+				
 	      	</h1>
-	      	<h2 id="site-sub-header">Where are you headed?</h2>
-	      	<div class="ui search" id="search-container">
-			 	<div class="ui icon input">
-					<input id="trip-search" class="prompt" type="text" placeholder="Paris, France">
-					<i class="search icon"></i>
-				</div>
-				<h2> </h2>
-				<!-- <div class="results"></div> -->
-			</div>
+	      	<h2 id="sub-header-text"></h2>
 	    </div>
 
 	  </div>
@@ -45,7 +29,7 @@
 	  <div class="ui vertical stripe segment">
 	    <div class="ui middle aligned stackable grid container">
 	      <div class="row">
-	        <div id="main-column" class="center aligned column">
+	        <div id="page-body" class="center aligned column">
 	        </div>
 	      </div>
 	    </div>

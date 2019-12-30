@@ -46,5 +46,10 @@ class TripsController < ApplicationController
 			image: params[:image])
 	end
 
+	def destroy
+		tripID = params[:id]
+		Trip.destroy(tripID)
+	end
+
 
 end

@@ -1,3 +1,5 @@
+const EVENT_TYPES = ['Flight','Food','Lodging','Activity','Reservation','Rental Car']
+
 function loadEventPage(event) {
 	const tripID = event.currentTarget.id.split('-')[1]
 	getTripData(tripID)
@@ -24,41 +26,57 @@ function getTripData(trip_id) {
 		.catch(error => console.log(error.message))
 }
 
+//CURRENTLY UNUSED AS OF 12/20/2019
+function getEventIcon(event_type) {
+	let icon = document.createElement('i')
+	icon.className = ('icon')
+	switch (event_type) {
+		case 'Flight':
+			icon.classList.add('plane')
+		case 'Food':
+			icon.classList.add('utensils')
+		case 'Lodging':
+			icon.classList.add('building')
+		case 'Activity':
+			icon.classList.add('bicycle')
+		case 'Reservation':
+			icon.classList.add('calendar')
+		case 'Rental Car':
+			icon.classList.add('car')
+		default:
+			icon.className = ''
+	}
+	return icon
+}
+
 function loadAgendaPage(trip) {
-
-	const mainContainer = clearMainContainer()
-	mainContainer.classList.remove('center')
-	mainContainer.classList.add('left')
-	mainContainer.classList.add('ui','segment')
-
-	const siteHeader = document.querySelector('#site-header')
-	siteHeader.innerText = trip.nickname
-
-	const subHeader = document.querySelector('#site-sub-header')
-	subHeader.innerText = `${trip.destination}: ${formatDate(trip.start_date)} — ${formatDate(trip.end_date)}`
-
-	document.querySelector('#search-container').innerHTML = `<i class="plane icon"></i>
-				${trip.attendees.length} Travellers`
-
+	const mainContainer = clearPageBody()
 	const headerContainer = createWithClasses('div','ui','large','header','center','aligned')
-	
-	const header = createWithClasses('div','ui','medium','header','center','aligned')
-	header.innerText = "Flytinerary"
-	header.id = 'trip-agenda-header'
+
+	const header = createWithClasses('h2','ui','header')
+	header.innerText = "Flytinerary:"
 
 	const createEventBtn = createWithClasses('button','ui','button','right','floated')
+	if (trip.event_timeline.length === 0) {
+		createEventBtn.classList.remove('right')
+		createEventBtn.classList.add('center')
+		createEventBtn.style.marginRight = 0;
+	}
 	createEventBtn.innerText = "Add Event"
-	createEventBtn.id = "new-event-button"
+	createEventBtn.id = "add-event-btn"
+	createEventBtn.dataset.id = `trip-${trip.id}`
 	createEventBtn.addEventListener('click', buildNewEventForm)
 	headerContainer.append(header, createEventBtn)
-	
+
 	mainContainer.append(headerContainer, buildAgendaTimeline(trip))
 
 }
 
 function buildAgendaTimeline(trip) {
 	const agenda = createWithClasses('div','list')
-	agenda.id = `trip-${trip.id}-agenda`
+	getPageBody().classList.remove('center')
+	getPageBody().classList.add('left')
+	agenda.id = `agenda-page`
 
 	let agendaDate = '' // determines date uniqueness
 	let eventsContainer = '' // assigns the UL for each date
@@ -73,9 +91,9 @@ function buildAgendaTimeline(trip) {
 		// then it's set to the previous event's date
 		if (agendaDate === '' || agendaDate !== eventDate) {
 			agendaDate = eventDate
-
-			const eventDateHeader = createWithClasses('h1','header','large')
-			eventDateHeader.innerText = `${agendaDate}` //${event.start.getDay()} 
+			const eventDateHeader = createWithClasses('div','ui', 'header','medium')
+			// eventDateHeader.innerText = `${getDayFromDate(agendaDate)}, ${agendaDate}`
+			eventDateHeader.innerText = `${formatFullDate(agendaDate)}`
 				// set the container for the event details
 				const events = createWithClasses('ul', 'content','list')
 				eventsContainer = events
@@ -99,13 +117,14 @@ function buildAgendaTimeline(trip) {
 }
 
 function buildNewEventForm(event) {
-	console.log("Adding Event")
-	document.querySelector('#trip-agenda-header').innerText = "Add Flytinerary Item"
-	document.querySelector("#new-event-button").style.display = "none"
+	console.log("Adding Event Form")
+	document.querySelector('#page-body .ui.header h2').innerText = "Add Flytinerary Item"
+	document.querySelector("#add-event-btn").style.display = "none"
 
-	let agenda = document.querySelector('#main-column .list')
+	let agenda = document.querySelector('#page-body .list')
 
 	let form = createWithClasses('form', 'ui','form')
+	form.dataset.id = event.currentTarget.dataset.id
 		
 		const traveller = createFormInputLabel("Traveller", "text", "traveller_id", "Traveller Name")
 			traveller.id = "traveller-id"
@@ -121,28 +140,29 @@ function buildNewEventForm(event) {
 			
 			let select = createWithClasses('select', 'ui', 'form', 'selection', 'dropdown')
 			  select.name = "event_type"
-			  select.innerHTML = `
-			  		  <option value="" disabled selected>Select Event Type</option>
-				      <option value="flight">Flight</option>
-				      <option value="food">Food</option>
-				      <option value="lodging">Lodging</option>
-				      <option value="activity">Activity</option>
-				      <option value="reservation">Reservation</option>
-			  `
 
+			const selectPrefill = document.createElement('option')
+			selectPrefill.value = ''
+			selectPrefill.innerText = "Select Event Type"
+			selectPrefill.disabled = true
+			selectPrefill.selected = true
+			select.appendChild(selectPrefill)
+
+			  EVENT_TYPES.forEach(type => {
+			  	let option = document.createElement('option')
+			  	option.innerText = type
+			  	option.value = type.toLowerCase()
+			  	select.appendChild(option)
+			  })
 		eventType.append(label, select)
 			  
 		const dates = createWithClasses('div','field')
-			// const dateLabel = document.createElement('label', 'container')
-			// dateLabel.innerText = "Event Dates"
-			// dates.appendChild(dateLabel)
+			const tripDates = document.querySelector('#sub-header-text p').innerText
 
-			const tripDates = document.querySelector('#site-sub-header').innerText.split(':')
-
-			const tripStart = new Date(tripDates[1].split('—')[0].trim())
-			console.log(`tripStart = ${tripStart}`)
-			const tripEnd = new Date(tripDates[1].split('—')[1].trim())
-			console.log(`tripEnd = ${tripEnd}`)
+			const tripStart = new Date(tripDates.split('—')[0].trim())
+			// console.log(`tripStart = ${tripStart}`)
+			const tripEnd = new Date(tripDates.split('—')[1].trim())
+			// console.log(`tripEnd = ${tripEnd}`)
 
 			const start_end = createWithClasses('div','two','fields')
 			  const start = createFormInputLabel('Event Start', "datetime-local", "start", '', prefillDateTime(tripStart)) //@TODO rework function to accept string
@@ -160,13 +180,28 @@ function buildNewEventForm(event) {
 			descArea.placeholder = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nulla..."
 		description.append(descLabel, descArea)
 
-		let submit = createWithClasses('button', 'ui','button', 'right','floated')
+
+		const submit = createWithClasses('button', 'ui','button', 'right','floated', 'primary')
 		submit.innerText = "Create Event"
 
 	form.append(traveller, eventType, dates, description, submit)
 	form.addEventListener('submit', processNewEvent)
+		
+	const cancel = createWithClasses('button','ui','button', 'red')
+	cancel.innerText = "Cancel"
+	cancel.addEventListener('click', cancelForm)
 
-	agenda.prepend(form)
+	agenda.prepend(form, cancel)
+}
+
+function cancelForm(event) {
+	console.log('cancel form')
+	const tripID = document.querySelector('form').remove()
+	event.currentTarget.remove()
+	const createEventBtn = document.querySelector("#add-event-btn")
+	createEventBtn.style.display = "inline-block"
+	createEventBtn.classList.add('right')
+	createEventBtn.classList.remove('center')
 }
 
 function processNewEvent(event) {
@@ -177,8 +212,8 @@ function processNewEvent(event) {
 	if (!validateEventForm(event.target)) {
 		alert("Please fill out the Event form before proceeding...")
 	} else {
-		const agendaPage = document.querySelector('#main-column .list')
-		const tripID = Number(agendaPage.id.split('-')[1])
+		const formID = event.target.dataset.id
+		const tripID = Number(formID.split('-')[1])
 
 		const newEventBody = {
 			event_type: event.target.event_type.selectedOptions[0].text,
@@ -194,7 +229,10 @@ function processNewEvent(event) {
 		}
 
 		createNewEvent(newEventBody)
-		document.querySelector("#new-event-button").style.display = "inline-block"
+		const createEventBtn = document.querySelector("#add-event-btn")
+		createEventBtn.style.display = "inline-block"
+		createEventBtn.classList.add('right')
+		createEventBtn.classList.remove('center')
 
 	}
 }
@@ -212,6 +250,7 @@ function validateEventForm(form) {
 }
 
 function createNewEvent(body) {
+	console.log("createNewEvent")
 	const eventConfig = fetchConfig(body, "POST")
 
 	fetch(EVENTS_URL, eventConfig)

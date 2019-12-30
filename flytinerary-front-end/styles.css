@@ -1,0 +1,30 @@
+#search-container {
+	margin-bottom: calc(1rem);
+}
+
+#agenda-page,
+#new-trip-form {
+	width: 70%;
+	margin: auto;
+}
+
+#trips-traveller-list {
+	width: 50%;
+	margin: auto;
+	padding: 0px;
+	margin-top: calc(1rem);
+	list-style: none;
+}
+
+#add-event-btn {
+	margin-right: 15%;
+}
+hr.short {
+	height:1px;
+	border:none;
+	color:#000;
+	background-color:#000;
+	width:75%;
+	text-align:center;
+	margin: 2em auto 0;
+}
