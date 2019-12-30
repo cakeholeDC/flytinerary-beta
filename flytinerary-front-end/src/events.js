@@ -56,7 +56,7 @@ function loadAgendaPage(trip) {
 	const header = createWithClasses('h2','ui','header')
 	header.innerText = "Flytinerary:"
 
-	const createEventBtn = createWithClasses('button','ui','button','right','floated')
+	const createEventBtn = createWithClasses('button','ui','button','right','floated', 'primary')
 	if (trip.event_timeline.length === 0) {
 		createEventBtn.classList.remove('right')
 		createEventBtn.classList.add('center')

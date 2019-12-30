@@ -123,7 +123,7 @@ function createTripForm(search) {
 
 	const image = createFormInputLabel('Image URL', "text", "image", "Leave this blank and we'll find an image matching your destination!")
 
-	const submit = createWithClasses('button', 'ui','button', 'green')
+	const submit = createWithClasses('button', 'ui','button', 'positive')
 	submit.innerText = "Schedule Trip"
 
 	tripForm.append(nickname, destination, dates, image, submit)
@@ -147,7 +147,7 @@ function processTripForm(event) {
 			nickname: event.target.nickname.value,
 	    	destination: event.target.destination.value,
 	    	start_date: event.target.start.value,
-	    	end_date: event.target.nickname.value,
+	    	end_date: event.target.end.value,
 	    	image: url,
 	    	traveller_id: SESSION_USER
 		}
@@ -181,6 +181,7 @@ function validateTripForm(form) {
 }
 
 function createNewTrip(body) {
+	// @@@TODO end date is blank here.....
 	const tripConfig = fetchConfig(body, "POST")
 	debugger
 	fetch(TRIPS_URL, tripConfig)
@@ -231,7 +232,14 @@ function createTripHeader(trip) {
 		addnlContent.appendChild(addTripAttendees(trip))
 	}
 
-	let deleteTripBtn = createWithClasses('button', 'ui', 'button', 'red')
+	const editTripBtn = createWithClasses('button', 'ui', 'button', 'orange')
+	editTripBtn.innerHTML = `<i class="pencil icon"></i>Edit Trip`
+	editTripBtn.addEventListener('click', editTrip)
+	editTripBtn.dataset.id = `trip-${trip.id}`
+	editTripBtn.dataset.tripName = trip.nickname
+	subHead.appendChild(editTripBtn)
+
+	const deleteTripBtn = createWithClasses('button', 'ui', 'button', 'negative')
 	deleteTripBtn.innerHTML = `<i class="x icon"></i>Cancel Trip`
 	deleteTripBtn.addEventListener('click', deleteTrip)
 	deleteTripBtn.dataset.id = `trip-${trip.id}`
@@ -253,11 +261,9 @@ function addTripAttendees(trip) {
 
 
 function deleteTrip(event) {
-
 	const reallyDelete = confirm(`Are you sure you want to cancel ${event.currentTarget.dataset.tripName}?`)
 
     if (reallyDelete) {
-
     	tripID = event.currentTarget.dataset.id.split('-')[1]
 
     	deleteConfig = {
@@ -277,4 +283,10 @@ function deleteTrip(event) {
 		  })
 		  .catch(error => console.log(error.message))
 	}
+}
+
+function editTrip(event) {
+	console.log('insert edit functionality here')
+	createTripForm()
+	// THEN, center content again, change header, update button text, etc.
 }
