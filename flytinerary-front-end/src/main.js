@@ -1,5 +1,6 @@
 const BASE_URL = 'http://localhost:3000'
 const TRIPS_URL = `${BASE_URL}/trips`
+const TRAVELLERS_URL = `${BASE_URL}/travellers`
 const EVENTS_URL = `${BASE_URL}/events`
 const SESSION_USER = Math.floor(Math.random() * 7) + 1;
 

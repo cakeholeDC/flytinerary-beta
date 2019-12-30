@@ -1,13 +1,4 @@
-function loadEventPage(event) {
-	const tripID = event.currentTarget.id.split('-')[1]
-	// steppedTripContainer() //loads the stepped interface, all disabled
-	// const currentStep = document.querySelector('#step-trip-events')
-	// currentStep.classList.remove('disabled')
-	// currentStep.classList.add('active')
-
-  // getTripEventData(tripID)
-	getTripData(tripID)
-}
+//DEPRECIATED
 
 //duplicate function. REFACTOR
 function getTripEventData(trip_id) {
@@ -21,7 +12,9 @@ function getTripEventData(trip_id) {
 		.catch(error => console.log(error.message))
 }
 
+//renders as table....
 function renderEvents(trip) {
+  //renders stepped headers
 	const steppedContent = document.querySelector('#stepped-content')
 
 	const tripHeader = createWithClasses('h1', 'ui', 'header')
