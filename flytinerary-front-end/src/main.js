@@ -7,6 +7,7 @@ const SESSION_USER = Math.floor(Math.random() * 7) + 1;
 document.addEventListener("DOMContentLoaded", function(){
 	console.log("connected")
 	loadHomePage()
+	addNavBar()
 	attachEventListeners()
 })
 
@@ -43,7 +44,8 @@ function homePageHeader() {
 	const subHead = getHeaderBar().querySelector('#sub-header-text')
 	subHead.innerText = "Where are you headed?"
 
-	getHeaderBar().querySelector('#header-content').appendChild(addSearchBar())
+	addSearchBar()
+	clearPageBody()
 
 	getHeaderBar().style.backgroundImage = `none`;
 	getHeaderBar().querySelector('#header-container').style.background = "none"
@@ -60,24 +62,48 @@ function homePageHeader() {
 function addSearchBar() {
 	if (document.querySelector('#search-container')) {
 		searchContainer = document.querySelector('#search-container')
+		searchContainer.innerHTML = ''
 	} else {
 		searchContainer = createWithClasses('div', 'ui','search')
 		searchContainer.id = 'search-container'
-
-		const searchDiv = createWithClasses('div', 'ui', 'icon', 'input')
-			const searchField = createWithClasses('input', 'prompt')
-			  searchField.id = 'trip-search'
-			  searchField.type = 'text'
-			  searchField.placeholder = "Paris, France"
-			  searchField.addEventListener('keypress', newTrip)
-			const searchIcon = createWithClasses('i', 'search', 'icon')
-		searchDiv.append(searchField, searchIcon)
-
-		searchContainer.append(searchDiv)
 	}
+	const searchDiv = createWithClasses('div', 'ui', 'icon', 'input')
+		const searchField = createWithClasses('input', 'prompt')
+		  searchField.id = 'trip-search'
+		  searchField.type = 'text'
+		  searchField.placeholder = "Paris, France"
+		  searchField.addEventListener('keypress', newTrip)
+		const searchIcon = createWithClasses('i', 'search', 'icon')
+	searchDiv.append(searchField, searchIcon)
 
-	return searchContainer
+	searchContainer.append(searchDiv)
+
+	getHeaderBar().querySelector('#header-content').appendChild(searchContainer)
+	// return searchContainer
 }
+
+function addNavBar() {
+	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'mini', 'borderless')
+		const navTitle = createWithClasses('div','header','item')
+		navTitle.innerText = "Flytinerary"
+		const navHome = createWithClasses('a', 'item')
+		navHome.addEventListener('click', loadHomePage)
+		navHome.innerText = 'Home'
+
+		const rightMenu = createWithClasses('div','right','menu')
+
+		const loginContainer = createWithClasses('div','item')
+			const navLogIn = createWithClasses('div', 'ui', 'button', 'primary')
+			navLogIn.innerText = 'Log In'
+		loginContainer.append(navLogIn)
+
+		rightMenu.append(loginContainer)
+
+	navBar.append(navTitle, navHome, rightMenu)
+
+	document.querySelector('.page').prepend(navBar)
+}
+
 
 function steppedTripContainer() {
 	const mainContainer = document.querySelector('#page-body')

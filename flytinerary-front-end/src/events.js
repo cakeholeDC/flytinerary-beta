@@ -181,13 +181,13 @@ function buildNewEventForm(event) {
 		description.append(descLabel, descArea)
 
 
-		const submit = createWithClasses('button', 'ui','button', 'right','floated', 'primary')
+		const submit = createWithClasses('button', 'ui','button', 'right','floated', 'positive')
 		submit.innerText = "Create Event"
 
 	form.append(traveller, eventType, dates, description, submit)
 	form.addEventListener('submit', processNewEvent)
 		
-	const cancel = createWithClasses('button','ui','button', 'red')
+	const cancel = createWithClasses('button','ui','button', 'negative')
 	cancel.innerText = "Cancel"
 	cancel.addEventListener('click', cancelForm)
 

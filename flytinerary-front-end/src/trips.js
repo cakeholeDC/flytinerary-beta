@@ -252,22 +252,28 @@ function createTripHeader(trip) {
 		addnlContent.appendChild(addTripAttendees(trip))
 	}
 
-	const editTripBtn = createWithClasses('button', 'ui', 'button', 'orange')
+	const btnContainer = createWithClasses('div')
+	btnContainer.id = 'trip-actions-container'
+
+	const editTripBtn = createWithClasses('button', 'ui', 'button', 'mini', 'orange','left','attached')
 	editTripBtn.innerHTML = `<i class="pencil icon"></i>Edit Trip`
 	editTripBtn.addEventListener('click', editTrip)
 	editTripBtn.dataset.id = `trip-${trip.id}`
 	editTripBtn.id = 'edit-trip-button'
 	editTripBtn.disabled = false;
 	editTripBtn.dataset.tripName = trip.nickname
-	subHead.appendChild(editTripBtn)
+	btnContainer.appendChild(editTripBtn)
 
-	const deleteTripBtn = createWithClasses('button', 'ui', 'button', 'negative')
+	const deleteTripBtn = createWithClasses('button', 'ui', 'button', 'mini','negative','right','attached')
 	deleteTripBtn.innerHTML = `<i class="x icon"></i>Cancel Trip`
 	deleteTripBtn.addEventListener('click', deleteTrip)
 	deleteTripBtn.dataset.id = `trip-${trip.id}`
 	deleteTripBtn.id = 'delete-trip-button'
 	deleteTripBtn.dataset.tripName = trip.nickname
-	subHead.appendChild(deleteTripBtn)
+	btnContainer.appendChild(deleteTripBtn)
+
+	addnlContent.appendChild(btnContainer)
+
 }
 
 function addTripAttendees(trip) {
@@ -280,8 +286,6 @@ function addTripAttendees(trip) {
 	})
 	return travellerList
 }
-
-
 
 function deleteTrip(event) {
 	const reallyDelete = confirm(`Are you sure you want to cancel ${event.currentTarget.dataset.tripName}?`)

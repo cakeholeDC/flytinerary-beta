@@ -2,11 +2,24 @@
 	margin-bottom: calc(1rem);
 }
 
+#trip-actions-container {
+	margin-top: calc(1rem);
+}
+
 #agenda-page,
 #new-trip-form {
 	width: 70%;
 	margin: auto;
 }
+
+.ui.menu {
+	margin: 0 0 0 0;
+	border-radius: 0px;
+}
+
+/*.ui.inverted.menu .item:before {
+	background: none;
+}*/
 
 #trips-traveller-list {
 	width: 50%;
@@ -19,6 +32,12 @@
 #add-event-btn {
 	margin-right: 15%;
 }
+
+#home-btn {
+	margin-left: calc(2rem);
+	clear: right
+}
+
 hr.short {
 	height:1px;
 	border:none;
