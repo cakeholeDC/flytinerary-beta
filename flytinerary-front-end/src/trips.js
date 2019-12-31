@@ -37,6 +37,7 @@ function renderTripCard(trip) {
 	cardImage.classList.add('image')
 		const image = document.createElement('img')
 		image.src = `${trip.image}`
+		image.classList.add('card-image')
 
 	cardImage.append(image)
 
@@ -86,6 +87,7 @@ function newTrip(event) {
 
 		const searchContent = event.currentTarget.value
 		event.currentTarget.disabled = true
+		debugger
 		
 		createTripForm(searchContent)
     }
@@ -93,6 +95,9 @@ function newTrip(event) {
 
 function createTripForm(search) {
 	const mainContainer = getPageBody()
+
+	mainContainer.classList.remove('left', 'aligned', 'column')
+	mainContainer.classList.add('center', 'aligned', 'column')
 
 	const header = createWithClasses('h2','ui','header')
 	header.innerText = "Plan an Adventure!"
@@ -153,18 +158,20 @@ function processTripForm(event) {
 		}
 		//if the user did not provie an image, fetch one using their destination search query
 		if (url === "") {
-			fetch(`https://source.unsplash.com/290x290/?${event.target.destination.value}`)
+			fetch(`https://source.unsplash.com/500x500/?${event.target.destination.value}`)
 				.then(response => {
 					if (response.ok){
 						url = response.url
 					}
 				})
 				.then(()=> {
-					//URL is a random 290x290 image using query params
+					//URL is a random 500x500 image using query params
 					tripBody.image = url
 					createNewTrip(tripBody)
 				})
 				.catch(error => console.log(error.message))
+		} else {
+			createNewTrip(tripBody)
 		}
 	}
 }
@@ -181,9 +188,8 @@ function validateTripForm(form) {
 }
 
 function createNewTrip(body) {
-	// @@@TODO end date is blank here.....
 	const tripConfig = fetchConfig(body, "POST")
-	debugger
+
 	fetch(TRIPS_URL, tripConfig)
 		.then(response => {
 			if (response.ok){
@@ -217,7 +223,21 @@ function loadTripPage(trip) {  // FETCH source IS getSingleTrip() from TRIP.js
 	loadAgendaPage(trip)
 }
 
+function setTripBackground(url) {
+	getHeaderBar().style.backgroundImage = `url('${url}')`;
+	getHeaderBar().style.backgroundRepeat = "no-repeat"
+	getHeaderBar().style.backgroundSize = "cover"
+	getHeaderBar().style.backgroundPosition = "center"
+	getHeaderBar().querySelector('#header-container').style.background = "rgba(255, 255, 255, .7)"
+	getHeaderBar().querySelector('#header-container').style.color = "#000000"
+	getHeaderBar().querySelector('#header-container').style.borderRadius = "25px"
+	getHeaderBar().querySelector('#header-container').style.padding = "10px"
+
+	getHeaderBar().querySelector('#header-container h1').classList.remove('inverted')
+}
+
 function createTripHeader(trip) {
+	setTripBackground(trip.image)
 	const headerText = getHeaderBar().querySelector("#header-text")
 	headerText.innerText = trip.nickname
 	const subHead = getHeaderBar().querySelector('#sub-header-text')
@@ -236,6 +256,8 @@ function createTripHeader(trip) {
 	editTripBtn.innerHTML = `<i class="pencil icon"></i>Edit Trip`
 	editTripBtn.addEventListener('click', editTrip)
 	editTripBtn.dataset.id = `trip-${trip.id}`
+	editTripBtn.id = 'edit-trip-button'
+	editTripBtn.disabled = false;
 	editTripBtn.dataset.tripName = trip.nickname
 	subHead.appendChild(editTripBtn)
 
@@ -243,6 +265,7 @@ function createTripHeader(trip) {
 	deleteTripBtn.innerHTML = `<i class="x icon"></i>Cancel Trip`
 	deleteTripBtn.addEventListener('click', deleteTrip)
 	deleteTripBtn.dataset.id = `trip-${trip.id}`
+	deleteTripBtn.id = 'delete-trip-button'
 	deleteTripBtn.dataset.tripName = trip.nickname
 	subHead.appendChild(deleteTripBtn)
 }
@@ -286,7 +309,93 @@ function deleteTrip(event) {
 }
 
 function editTrip(event) {
-	console.log('insert edit functionality here')
+	console.log('its ok, we all have to change our plans sometimes.')
+	const tripID = event.currentTarget.dataset.id
+
 	createTripForm()
-	// THEN, center content again, change header, update button text, etc.
+
+	document.querySelector('#edit-trip-button').disabled = true;
+
+	getPageBody().querySelector('h2.ui.header').innerText = "It's ok, we all change plans."
+	getPageBody().querySelector('#new-trip-form button').innerText = "Reschedule Trip"
+
+	const tripForm = document.querySelector('#new-trip-form')
+	tripForm.removeEventListener('submit', processTripForm)
+	tripForm.addEventListener('submit', processTripUpdate)
+	tripForm.dataset.id = tripID
+	
+	const nickname = document.querySelector('#header-text').innerText
+	const destination = document.querySelector('#sub-header-text').innerText.split("\n")[0]
+
+	const dates = document.querySelector('#sub-header-text').innerText.split("\n")[2]
+
+	const start = dates.split(' — ')[0]
+	const end = dates.split(' — ')[1]
+	const image = getHeaderBar().style.backgroundImage.slice(4, -1).replace(/"/g, "")
+
+	// THEN PREFILL FORM
+	tripForm.querySelector('input[name="nickname"]').value = nickname
+	tripForm.querySelector('input[name="destination"]').value = destination
+	tripForm.querySelector('input[name="start"]').value = prefillDate(start)
+	tripForm.querySelector('input[name="end"]').value = prefillDate(end)
+	tripForm.querySelector('input[name="image"]').value = image
+}
+
+function processTripUpdate(event) {
+	console.log('rescheduling trip')
+	event.preventDefault()
+	const id = event.currentTarget.dataset.id.split('-')[1]
+
+	if (!validateTripForm(event.target)) {
+		alert("Please fill out the Trip form before proceeding...")
+	} else {
+		let url = event.target.image.value
+
+		const tripBody = {
+			nickname: event.target.nickname.value,
+	    	destination: event.target.destination.value,
+	    	start_date: event.target.start.value,
+	    	end_date: event.target.end.value,
+	    	image: url,
+	    	traveller_id: SESSION_USER
+		}
+
+		//if the user did not provie an image, fetch one using their destination search query
+		if (url === "") {
+			console.log('fetching image')
+			fetch(`https://source.unsplash.com/500x500/?${event.target.destination.value}`)
+				.then(response => {
+					if (response.ok){
+						url = response.url
+						console.log('image found')
+						console.log(url)
+					}
+				})
+				.then(()=> {
+					//URL is a random 500x500 image using query params
+					tripBody.image = url
+					updateTrip(id, tripBody)
+				})
+				.catch(error => console.log(error.message))
+		} else {
+			updateTrip(id, tripBody)
+		}
+	}
+}
+
+function updateTrip(id, body) {
+	console.log('updating trip in rails...')
+	const tripConfig = fetchConfig(body, "PATCH")
+
+	fetch(`${TRIPS_URL}/${id}`, tripConfig)
+		.then(response => {
+			if (response.ok){
+				return response.json()
+			}
+		})
+		.then(trip => {
+			loadTripPage(trip)
+		})
+		.catch(error => console.log(`!!!${error.message}`))
+
 }

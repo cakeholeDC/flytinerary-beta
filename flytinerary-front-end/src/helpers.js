@@ -11,7 +11,7 @@ function prefillDate(datetime, month_offset) {
 	const date = new Date(Date.parse(datetime))
 	let year = date.getFullYear()
 	let month = date.getMonth() + 1
-	const day = date.getDate()
+	let day = date.getDate()
 	// month_offset offsets the month by one if true
 	if (month_offset) {
 		month += 1
@@ -19,6 +19,13 @@ function prefillDate(datetime, month_offset) {
 			month = '01'
 			year = year + 1
 		}
+	}
+
+	if (month.toString().length === 1) {
+		month = `0${month}`
+	}
+	if (day.toString().length === 1) {
+		day = `0${day}`
 	}
 
 	return `${year}-${month}-${day}`

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
 })
 
 function attachEventListeners() {
-	document.querySelector('#trip-search').addEventListener('keypress', newTrip)
+	// document.querySelector('#trip-search').addEventListener('keypress', newTrip)
 	// document.querySelector('#header-bar').addEventListener('click', () => loadHomePage())
 }
 
@@ -43,22 +43,41 @@ function homePageHeader() {
 	const subHead = getHeaderBar().querySelector('#sub-header-text')
 	subHead.innerText = "Where are you headed?"
 
-	getHeaderBar().querySelector('#header-container').appendChild(addSearchBar())
+	getHeaderBar().querySelector('#header-content').appendChild(addSearchBar())
+
+	getHeaderBar().style.backgroundImage = `none`;
+	getHeaderBar().querySelector('#header-container').style.background = "none"
+	getHeaderBar().querySelector('#header-container').style.color = "#FFFFFF"
+	getHeaderBar().querySelector('#header-container').style.borderRadius = "0px"
+	getHeaderBar().querySelector('#header-container').style.padding = "0px"
+
+	getHeaderBar().querySelector('#header-container h1').classList.add('inverted')
+
+	getPageBody().classList.remove('left','aligned','column')
+	getPageBody().classList.add('center','aligned','column')
 }
 
 function addSearchBar() {
-	const search = document.querySelector('#search-container') ? document.querySelector('#search-container') : createWithClasses('div', 'ui','search')
-	search.id = 'search-container'
-	search.innerHTML = `
-		<div class="ui icon input">
-			<input id="trip-search" class="prompt" type="text" placeholder="Paris, France">
-			<i class="search icon"></i>
-		</div>`
+	if (document.querySelector('#search-container')) {
+		searchContainer = document.querySelector('#search-container')
+	} else {
+		searchContainer = createWithClasses('div', 'ui','search')
+		searchContainer.id = 'search-container'
 
-	return search
+		const searchDiv = createWithClasses('div', 'ui', 'icon', 'input')
+			const searchField = createWithClasses('input', 'prompt')
+			  searchField.id = 'trip-search'
+			  searchField.type = 'text'
+			  searchField.placeholder = "Paris, France"
+			  searchField.addEventListener('keypress', newTrip)
+			const searchIcon = createWithClasses('i', 'search', 'icon')
+		searchDiv.append(searchField, searchIcon)
+
+		searchContainer.append(searchDiv)
+	}
+
+	return searchContainer
 }
-
-
 
 function steppedTripContainer() {
 	const mainContainer = document.querySelector('#page-body')
