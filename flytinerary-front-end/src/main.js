@@ -72,7 +72,7 @@ function addSearchBar() {
 		  searchField.id = 'trip-search'
 		  searchField.type = 'text'
 		  searchField.placeholder = "Paris, France"
-		  searchField.addEventListener('keypress', newTrip)
+		  searchField.addEventListener('keypress', showNewTripForm)
 		const searchIcon = createWithClasses('i', 'search', 'icon')
 	searchDiv.append(searchField, searchIcon)
 
@@ -85,7 +85,7 @@ function addSearchBar() {
 function addNavBar() {
 	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'mini', 'borderless')
 		const navTitle = createWithClasses('div','header','item')
-		navTitle.innerText = "Flytinerary"
+		navTitle.innerHTML = "<i class='plane icon'></i>Flytinerary"
 		const navHome = createWithClasses('a', 'item')
 		navHome.addEventListener('click', loadHomePage)
 		navHome.innerText = 'Home'

@@ -18,7 +18,7 @@ function addUpcomingTripsHeader() {
 	const mainContainer = getPageBody()
 
 	const header = createWithClasses('h2','ui','header')
-	header.innerText = "Upcoming Trips:"
+	header.innerText = "Upcoming Adventures:"
 
 	const tripContainer = createWithClasses('div','ui', 'cards', 'stackable', 'centered')
 	tripContainer.id = "trip-container"
@@ -80,14 +80,13 @@ function renderTripCard(trip) {
 	tripContainer.appendChild(card)
 }
 
-function newTrip(event) {
+function showNewTripForm(event) {
     var key = event.which || event.keyCode;
     if (key === 13) { // 13 is enter
 		console.log("enter key pressed")
 
 		const searchContent = event.currentTarget.value
 		event.currentTarget.disabled = true
-		debugger
 		
 		createTripForm(searchContent)
     }
@@ -128,15 +127,21 @@ function createTripForm(search) {
 
 	const image = createFormInputLabel('Image URL', "text", "image", "Leave this blank and we'll find an image matching your destination!")
 
-	const submit = createWithClasses('button', 'ui','button', 'positive')
+	const submit = createWithClasses('button', 'ui','button', 'positive', 'right', 'floated')
 	submit.innerText = "Schedule Trip"
 
 	tripForm.append(nickname, destination, dates, image, submit)
 
+
+	const cancelTripBtn = createWithClasses('button','ui','button','negative')
+	cancelTripBtn.id = 'cancel-trip-button'
+	cancelTripBtn.innerText = "Nevermind, I don't like to travel"
+	cancelTripBtn.addEventListener('click', ()=> console.log('cancel trip form'))
+
 	const divider = document.createElement('hr')
 	divider.classList.add('short')
 
-	tripFormContainer.append(tripForm, divider)
+	tripFormContainer.append(tripForm, cancelTripBtn, divider)
 	mainContainer.prepend(header, tripFormContainer)
 }
 
@@ -256,7 +261,7 @@ function createTripHeader(trip) {
 	btnContainer.id = 'trip-actions-container'
 
 	const editTripBtn = createWithClasses('button', 'ui', 'button', 'mini', 'orange','left','attached')
-	editTripBtn.innerHTML = `<i class="pencil icon"></i>Edit Trip`
+	editTripBtn.innerHTML = `<i class="pencil icon"></i>Reschedule Trip`
 	editTripBtn.addEventListener('click', editTrip)
 	editTripBtn.dataset.id = `trip-${trip.id}`
 	editTripBtn.id = 'edit-trip-button'
@@ -322,6 +327,11 @@ function editTrip(event) {
 
 	getPageBody().querySelector('h2.ui.header').innerText = "It's ok, we all change plans."
 	getPageBody().querySelector('#new-trip-form button').innerText = "Reschedule Trip"
+
+	let cancelTripBtn = getPageBody().querySelector('#cancel-trip-button')
+	cancelTripBtn.innerText = "Nevermind, this trip looks too fun!"
+	cancelTripBtn.removeEventListener('click', ()=> console.log('cancel trip form'))
+	cancelTripBtn.addEventListener('click', ()=> console.log('cancel trip edit form'))
 
 	const tripForm = document.querySelector('#new-trip-form')
 	tripForm.removeEventListener('submit', processTripForm)

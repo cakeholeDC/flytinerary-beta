@@ -3,15 +3,6 @@ const EVENT_TYPES = ['Flight','Food','Lodging','Activity','Reservation','Rental 
 function loadEventPage(event) {
 	const tripID = event.currentTarget.id.split('-')[1]
 	getTripData(tripID)
-
-
-	// // stepped interface
-	// steppedTripContainer() //loads the stepped interface, all disabled
-	// const currentStep = document.querySelector('#step-trip-events')
-	// currentStep.classList.remove('disabled')
-	// currentStep.classList.add('active')
-
-  // getTripEventData(tripID)
 }
 
 function getTripData(trip_id) {
@@ -108,7 +99,7 @@ function buildAgendaTimeline(trip) {
 		eventTime.innerText = `${getEventTime(event.start)} - ${getEventTime(event.end)}`
 			// then list event details
 			const eventDetails = createWithClasses('ul', 'list')
-			eventDetails.innerHTML = `<li class=item>${event.description}</li>`
+			eventDetails.innerHTML = `<li class=item event-hover>${event.description}<span> <i class="pencil icon small grey" visibility="hidden"></i></span></li>`
 			eventTime.appendChild(eventDetails)
 		eventsContainer.appendChild(eventTime)
 	})
