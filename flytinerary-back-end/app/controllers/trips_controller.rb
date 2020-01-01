@@ -26,7 +26,7 @@ class TripsController < ApplicationController
 					attendees: {except: [:created_at, :updated_at, :id]},
 					event_timeline: {
 						include: [traveller_name: { only: :name}],
-						except: [:created_at, :updated_at, :traveller_id, :trip_id, :id]
+						except: [:created_at, :updated_at, :traveller_id, :trip_id]
 					}
 				]
 			)
@@ -53,7 +53,7 @@ class TripsController < ApplicationController
 					attendees: {except: [:created_at, :updated_at, :id]},
 					event_timeline: {
 						include: [traveller_name: { only: :name}],
-						except: [:created_at, :updated_at, :traveller_id, :trip_id, :id]
+						except: [:created_at, :updated_at, :traveller_id, :trip_id]
 					}
 				]
 			)
@@ -82,7 +82,7 @@ class TripsController < ApplicationController
 					attendees: {except: [:created_at, :updated_at, :id]},
 					event_timeline: {
 						include: [traveller_name: { only: :name}],
-						except: [:created_at, :updated_at, :traveller_id, :trip_id, :id]
+						except: [:created_at, :updated_at, :traveller_id, :trip_id]
 					}
 				]
 			)

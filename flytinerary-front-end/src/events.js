@@ -5,6 +5,7 @@ function loadEventPage(event) {
 	getTripData(tripID)
 }
 
+//@TODO rename to EVENT data, find references
 function getTripData(trip_id) {
 	fetch(`${TRIPS_URL}/${trip_id}`)
 		.then(response => {
@@ -12,36 +13,28 @@ function getTripData(trip_id) {
 				return response.json()
 			}
 		})
-		// .then(trip => renderEvents(trip))
 		.then(trip => loadAgendaPage(trip))
 		.catch(error => console.log(error.message))
 }
 
-//CURRENTLY UNUSED AS OF 12/20/2019
-function getEventIcon(event_type) {
-	let icon = document.createElement('i')
-	icon.className = ('icon')
-	switch (event_type) {
-		case 'Flight':
-			icon.classList.add('plane')
-		case 'Food':
-			icon.classList.add('utensils')
-		case 'Lodging':
-			icon.classList.add('building')
-		case 'Activity':
-			icon.classList.add('bicycle')
-		case 'Reservation':
-			icon.classList.add('calendar')
-		case 'Rental Car':
-			icon.classList.add('car')
-		default:
-			icon.className = ''
-	}
-	return icon
+function getSingleEventInfo(event_id) {
+	fetch(`${EVENTS_URL}/${event_id}`)
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			}
+		})
+		.then(eventData => console.log(event.data))
+		.catch(error => console.log(error.message))
 }
 
 function loadAgendaPage(trip) {
 	const mainContainer = clearPageBody()
+
+	const contentContainer = createWithClasses('div', 'container', 'left','aligned','conlumn')
+	contentContainer.id = 'content-container'
+	mainContainer.appendChild(contentContainer)
+
 	const headerContainer = createWithClasses('div','ui','large','header','center','aligned')
 
 	const header = createWithClasses('h2','ui','header')
@@ -59,7 +52,7 @@ function loadAgendaPage(trip) {
 	createEventBtn.addEventListener('click', buildNewEventForm)
 	headerContainer.append(header, createEventBtn)
 
-	mainContainer.append(headerContainer, buildAgendaTimeline(trip))
+	contentContainer.append(headerContainer, buildAgendaTimeline(trip))
 
 }
 
@@ -83,12 +76,11 @@ function buildAgendaTimeline(trip) {
 		if (agendaDate === '' || agendaDate !== eventDate) {
 			agendaDate = eventDate
 			const eventDateHeader = createWithClasses('div','ui', 'header','medium')
-			// eventDateHeader.innerText = `${getDayFromDate(agendaDate)}, ${agendaDate}`
 			eventDateHeader.innerText = `${formatFullDate(agendaDate)}`
+				
 				// set the container for the event details
 				const events = createWithClasses('ul', 'content','list')
 				eventsContainer = events
-				// eventDateHeader.appendChild(events)
 
 			agenda.appendChild(eventDateHeader)
 				agenda.appendChild(events)
@@ -96,10 +88,21 @@ function buildAgendaTimeline(trip) {
 
 		// then show event by time
 		const eventTime = createWithClasses('li', "item")
+		eventTime.id = `event-${event.id}-datetime`
 		eventTime.innerText = `${getEventTime(event.start)} - ${getEventTime(event.end)}`
 			// then list event details
-			const eventDetails = createWithClasses('ul', 'list')
-			eventDetails.innerHTML = `<li class=item event-hover>${event.description}<span> <i class="pencil icon small grey" visibility="hidden"></i></span></li>`
+			const eventDetails = createWithClasses('ul', 'list', 'event-hover')
+				const eventDesc = createWithClasses('li', 'item','event-hover')
+				eventDesc.dataset.id = `event-${event.id}`
+				eventDesc.innerText = `${event.description} `
+				eventDesc.addEventListener('mouseenter', toggleEditIcon)
+				eventDesc.addEventListener('mouseleave', toggleEditIcon)
+				eventDesc.addEventListener('click', editEvent)
+				const eventType = document.createElement('span')
+				eventType.innerHTML = `<strong>${event.event_type} - ${event.traveller_name.name}: </strong>`
+				eventDesc.prepend(eventType)
+
+			eventDetails.append(eventDesc)
 			eventTime.appendChild(eventDetails)
 		eventsContainer.appendChild(eventTime)
 	})
@@ -107,15 +110,79 @@ function buildAgendaTimeline(trip) {
 	return agenda
 }
 
+function toggleEditIcon(event) {
+	const target  = event.currentTarget
+
+	if (target.querySelector('i.pencil.icon')) {
+		const icon = target.querySelector('i.pencil.icon')
+		icon.remove()
+	} else {
+		const icon = createWithClasses('i',"pencil","icon","small","grey")
+		target.appendChild(icon)
+	}
+}
+
+function editEvent(event) {
+	console.log('edit event')
+
+	event.currentTarget.removeEventListener('mouseenter', toggleEditIcon)
+	event.currentTarget.removeEventListener('mouseleave', toggleEditIcon)
+	//@TODO add these back after form processing
+
+	buildNewEventForm(event)
+	//@TODO add DELETE button.
+
+	const eventID = event.currentTarget.dataset.id.split('-')[1]
+
+	const time = getPageBody().querySelector(`#event-1-datetime`).innerText.split('\n')[0]
+	const startTime = time.split('-')[0].trim()
+	const endTime = time.split('-')[1].trim()
+
+	const date = event.currentTarget.parentElement.parentElement.parentElement.previousElementSibling.innerText //whoa.
+
+	const domEventContent = event.currentTarget.innerText
+	const description = domEventContent.split(":")[1].trim()
+	const traveller = domEventContent.split('-')[1].split(":")[0].trim()
+	const eventType = domEventContent.split('-')[0].trim()
+	// const start = ''
+	// const end = ''
+
+	const formTraveller = getEventForm().querySelector('input[name="traveller_id"]')
+	formTraveller.value = traveller
+
+	const formType = getEventForm().querySelector('select')
+	//find selected option and remove the selected identifier
+	debugger
+	formType.value = eventType
+	//fnid the option wiht the matching name and set that to selected
+
+
+
+
+	/*
+	traveller, eventType, dates, description, 
+
+	*/
+	toggleEditIcon(event)
+}
+
+function getEventForm() {
+	const form = document.querySelector('#new-event-form')
+	return form
+}
+
 function buildNewEventForm(event) {
 	console.log("Adding Event Form")
-	document.querySelector('#page-body .ui.header h2').innerText = "Add Flytinerary Item"
 	document.querySelector("#add-event-btn").style.display = "none"
 
-	let agenda = document.querySelector('#page-body .list')
+	let formBody = document.querySelector('#form-body')
+	const formHeader = createWithClasses('h2', 'ui','header')
+	formHeader.id = 'event-form-header'
+	formHeader.innerText = "Add Flytinerary Item"
 
 	let form = createWithClasses('form', 'ui','form')
 	form.dataset.id = event.currentTarget.dataset.id
+	form.id = 'new-event-form'
 		
 		const traveller = createFormInputLabel("Traveller", "text", "traveller_id", "Traveller Name")
 			traveller.id = "traveller-id"
@@ -146,18 +213,19 @@ function buildNewEventForm(event) {
 			  	select.appendChild(option)
 			  })
 		eventType.append(label, select)
-			  
+		
 		const dates = createWithClasses('div','field')
 			const tripDates = document.querySelector('#sub-header-text p').innerText
 
+
+			//@TODO make trip end date disasbled. all events should be a single day.
 			const tripStart = new Date(tripDates.split('—')[0].trim())
-			// console.log(`tripStart = ${tripStart}`)
 			const tripEnd = new Date(tripDates.split('—')[1].trim())
-			// console.log(`tripEnd = ${tripEnd}`)
 
 			const start_end = createWithClasses('div','two','fields')
-			  const start = createFormInputLabel('Event Start', "datetime-local", "start", '', prefillDateTime(tripStart)) //@TODO rework function to accept string
+			  const start = createFormInputLabel('Event Start', "datetime-local", "start", '', prefillDateTime(tripStart))
 			  const end = createFormInputLabel('Event End', "datetime-local", "end", '', prefillDateTime(tripEnd, true))
+			//@TODO rework functions to accept string so 'new Date' doesn't have to be used when defining tripStart and tripEnd
 
 			start_end.append(start, end)
 		dates.appendChild(start_end)
@@ -173,16 +241,21 @@ function buildNewEventForm(event) {
 
 
 		const submit = createWithClasses('button', 'ui','button', 'right','floated', 'positive')
-		submit.innerText = "Create Event"
+		submit.innerText = "Add to Flytinerary"
 
-	form.append(traveller, eventType, dates, description, submit)
+		const cancel = createWithClasses('a','ui','button', 'negative','left','floated')
+		cancel.innerText = "Nevermind, still planning..."
+		cancel.addEventListener('click', cancelForm)
+
+
+	form.append(traveller, eventType, dates, description, submit, cancel)
 	form.addEventListener('submit', processNewEvent)
 		
-	const cancel = createWithClasses('button','ui','button', 'negative')
-	cancel.innerText = "Cancel"
-	cancel.addEventListener('click', cancelForm)
+	const divider = document.createElement('hr')
+	divider.classList.add('short')
 
-	agenda.prepend(form, cancel)
+	formBody.prepend(formHeader, form, divider)
+	document.querySelector('#form-container').style.display = 'block'
 }
 
 function cancelForm(event) {
@@ -193,6 +266,8 @@ function cancelForm(event) {
 	createEventBtn.style.display = "inline-block"
 	createEventBtn.classList.add('right')
 	createEventBtn.classList.remove('center')
+	clearFormBody()
+	// document.querySelector('#event-form-header').remove()
 }
 
 function processNewEvent(event) {

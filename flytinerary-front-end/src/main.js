@@ -23,6 +23,7 @@ function getHeaderBar() {
 
 function loadHomePage() {
 	console.log('loading home page...')
+	clearFormBody()
 	getTrips() // goto trips.js
 	homePageHeader()
 }
@@ -32,10 +33,23 @@ function getPageBody() {
 	return pageBody
 }
 
+
 function clearPageBody() {
 	const pageBody = document.querySelector('#page-body')
 	pageBody.innerHTML = ''
 	return pageBody
+}
+
+function getFormBody() {
+	const formBody = document.querySelector('#form-body')
+	return formBody
+}
+
+function clearFormBody() {
+	const formBody = document.querySelector('#form-body')
+	formBody.innerHTML = ''
+	document.querySelector('#form-container').style.display = 'none'
+	return formBody
 }
 
 function homePageHeader() {

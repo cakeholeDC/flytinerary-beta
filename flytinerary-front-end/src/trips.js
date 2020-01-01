@@ -95,8 +95,8 @@ function showNewTripForm(event) {
 function createTripForm(search) {
 	const mainContainer = getPageBody()
 
-	mainContainer.classList.remove('left', 'aligned', 'column')
-	mainContainer.classList.add('center', 'aligned', 'column')
+	// mainContainer.classList.remove('left', 'aligned', 'column')
+	// mainContainer.classList.add('center', 'aligned', 'column')
 
 	const header = createWithClasses('h2','ui','header')
 	header.innerText = "Plan an Adventure!"
@@ -133,16 +133,34 @@ function createTripForm(search) {
 	tripForm.append(nickname, destination, dates, image, submit)
 
 
-	const cancelTripBtn = createWithClasses('button','ui','button','negative')
+	const cancelTripBtn = createWithClasses('a','ui','button','negative','left','floated')
 	cancelTripBtn.id = 'cancel-trip-button'
 	cancelTripBtn.innerText = "Nevermind, I don't like to travel"
-	cancelTripBtn.addEventListener('click', ()=> console.log('cancel trip form'))
+	cancelTripBtn.addEventListener('click', removeTripForm)
 
 	const divider = document.createElement('hr')
 	divider.classList.add('short')
+	tripForm.append(cancelTripBtn)
 
-	tripFormContainer.append(tripForm, cancelTripBtn, divider)
-	mainContainer.prepend(header, tripFormContainer)
+	tripFormContainer.append(header, tripForm, divider)
+	const formBody = document.querySelector('#form-body')
+	formBody.prepend(tripFormContainer)
+	document.querySelector('#form-container').style.display = 'block'
+}
+
+function removeTripForm(event) {
+	const tripEdit = document.querySelector('#edit-trip-button')
+	const search = document.querySelector('#trip-search')
+	if (search) {
+		search.disabled = false
+		search.value = ''
+	} else {
+		tripEdit.disabled = false
+		getPageBody().classList.remove('center', 'aligned', 'column')
+		getPageBody().classList.add('left', 'aligned', 'column')
+	}
+	document.querySelector('#trip-form-container').remove()
+	document.querySelector('#form-container').style.display = 'none'
 }
 
 function processTripForm(event) {
@@ -325,13 +343,11 @@ function editTrip(event) {
 
 	document.querySelector('#edit-trip-button').disabled = true;
 
-	getPageBody().querySelector('h2.ui.header').innerText = "It's ok, we all change plans."
-	getPageBody().querySelector('#new-trip-form button').innerText = "Reschedule Trip"
+	getFormBody().querySelector('h2.ui.header').innerText = "It's ok, we all change plans."
+	getFormBody().querySelector('#new-trip-form button').innerText = "Reschedule Trip"
 
 	let cancelTripBtn = getPageBody().querySelector('#cancel-trip-button')
 	cancelTripBtn.innerText = "Nevermind, this trip looks too fun!"
-	cancelTripBtn.removeEventListener('click', ()=> console.log('cancel trip form'))
-	cancelTripBtn.addEventListener('click', ()=> console.log('cancel trip edit form'))
 
 	const tripForm = document.querySelector('#new-trip-form')
 	tripForm.removeEventListener('submit', processTripForm)
