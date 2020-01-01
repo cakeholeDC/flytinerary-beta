@@ -49,14 +49,20 @@ function formatDateTime(datetime) {
 
 function prefillDateTime(datetime, offset) {
 	const date = new Date(Date.parse(datetime))
-	const hours = !offset ? '08' : '16' ;
-	const minutes = '00';
-
-	const humanTime = hours + ':' + minutes
-	
+	let hours = date.getHours() ;
+	let minutes = date.getMinutes();
 	let month = date.getMonth() + 1
 	let day = date.getDate()
 	const year = date.getFullYear()
+
+	if (hours.toString().length === 1) {
+		hours = `0${hours}`
+	}
+
+	if (minutes.toString().length === 1) {
+		minutes = `0${minutes}`
+	}
+	const humanTime = hours + ':' + minutes
 
 	if (month.toString().length === 1) {
 		month = `0${month}`

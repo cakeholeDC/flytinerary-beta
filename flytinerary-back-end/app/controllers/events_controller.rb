@@ -43,4 +43,8 @@ class EventsController < ApplicationController
 
 	end
 
+	def destroy
+		Event.destroy(params[:id])
+	end
+
 end
