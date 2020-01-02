@@ -13,4 +13,15 @@ class TravellersController < ApplicationController
 			except: [:updated_at, :created_at]
 			)
 	end
+
+	def create
+		traveller = Traveller.create(
+			name: params[:name],
+			age: params[:age],
+			gender: params[:gender])
+
+		render json: traveller.to_json(
+			except: [:updated_at, :created_at]
+			)
+	end
 end
