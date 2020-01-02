@@ -28,6 +28,26 @@ function loadHomePage() {
 	homePageHeader()
 }
 
+function loadAboutPage() {
+	console.log('loading about page...')
+	clearFormBody()
+	homePageHeader()
+	
+	const content = getPageBody()
+
+	const aboutHeader = createWithClasses('div','ui','header')
+	aboutHeader.innerText = "About Flytinerary"
+
+	const aboutContent = createWithClasses('p','content')
+	aboutContent.innerHTML = `Flytinerary is a travel planning app created by <a target="_blank" href="https://www.kylepcole.com/">Kyle Cole</a> as part of the <a target="_blank" href="https://flatironschool.com/career-courses/coding-bootcamp">Flatiron School's Software Engineering Immersive Bootcamp</a>
+					<br><br>Use the field at the top of the page to start planning a trip. Once a trip has been created, you will be able to manage events for that trip.`
+
+	const applicationVersion = createWithClasses('div', 'center', 'aligned')
+	applicationVersion.innerText = 'Flytinerary v1.0.0'
+
+	content.append(aboutHeader, aboutContent, applicationVersion)
+}
+
 function getPageBody() {
 	const pageBody = document.querySelector('#page-body')
 	return pageBody
@@ -104,6 +124,10 @@ function addNavBar() {
 		navHome.addEventListener('click', loadHomePage)
 		navHome.innerText = 'Home'
 
+		const navAbout = createWithClasses('a','item')
+		navAbout.innerText = "About"
+		navAbout.addEventListener('click', loadAboutPage)
+
 		const rightMenu = createWithClasses('div','right','menu')
 
 		const loginContainer = createWithClasses('div','item')
@@ -113,7 +137,7 @@ function addNavBar() {
 
 		rightMenu.append(loginContainer)
 
-	navBar.append(navTitle, navHome, rightMenu)
+	navBar.append(navTitle, navHome, navAbout, rightMenu)
 
 	document.querySelector('.page').prepend(navBar)
 }
