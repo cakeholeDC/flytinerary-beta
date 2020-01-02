@@ -266,6 +266,7 @@ function buildNewEventForm(event) {
 		
 		const traveller = createFormInputLabel("Traveller", "text", "traveller_id", "Traveller Name")
 			traveller.id = "traveller-id"
+			traveller.style.display = "none"
 
 			//@TODO lookup traveller name using getTraveller() from travellers.js
 			traveller.querySelector('input').value = SESSION_USER 

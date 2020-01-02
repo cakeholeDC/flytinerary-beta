@@ -27,17 +27,20 @@ function showLoginForm() {
 	clearFormBody()
 	clearPageBody()
 	// getHeaderBar().innerHTML = ''
-	// homePageHeader()
+	homePageHeader()
+	document.querySelector('#header-content').querySelector('#sub-header-text').style.display = "none"
+	document.querySelector('#header-content').querySelector('#search-container').style.display = "none"
 	const container = getFormBody()
 	// container.style.width = "70%"
 	// container.style.marginLeft = "auto"
 	// container.style.marginRight = "auto"
 
 	const loginForm = createWithClasses('form', 'ui','form', 'center', 'aligned')
+	loginForm.id = "log-in-form"
 
 	const userDiv = createWithClasses('div','field')
 			const label = createWithClasses('label')
-			  label.innerText = "Select a User"
+			  label.innerText = "Who are you?"
 			
 			let userSelect = createWithClasses('select', 'ui', 'form', 'selection', 'dropdown')
 			  userSelect.name = "user"
@@ -180,6 +183,7 @@ function homePageHeader() {
 	headerText.innerText = 'Welcome to 🛫 Flytinerary 🛬'
 	const subHead = getHeaderBar().querySelector('#sub-header-text')
 	subHead.innerText = "Where are you headed?"
+	subHead.style.display = "block"
 
 	addSearchBar()
 	clearPageBody()
@@ -214,6 +218,7 @@ function addSearchBar() {
 	searchDiv.append(searchField, searchIcon)
 
 	searchContainer.append(searchDiv)
+	searchContainer.style.display = "block"
 
 	getHeaderBar().querySelector('#header-content').appendChild(searchContainer)
 	// return searchContainer
