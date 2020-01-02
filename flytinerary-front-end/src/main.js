@@ -2,7 +2,7 @@ const BASE_URL = 'http://localhost:3000'
 const TRIPS_URL = `${BASE_URL}/trips`
 const TRAVELLERS_URL = `${BASE_URL}/travellers`
 const EVENTS_URL = `${BASE_URL}/events`
-const SESSION_USER = Math.floor(Math.random() * 7) + 1;
+var SESSION_USER = Math.floor(Math.random() * 7) + 1;
 
 document.addEventListener("DOMContentLoaded", function(){
 	console.log("connected")
@@ -20,6 +20,13 @@ function getHeaderBar() {
 	const pageHeader = document.querySelector('#header-bar')
 	return pageHeader
 }
+
+// function showLoginForm() {
+// 	console.log('loading home page...')
+// 	clearFormBody()
+// 	homePageHeader()
+// 	const container = getFormBody()
+// }
 
 function loadHomePage() {
 	console.log('loading home page...')
@@ -157,7 +164,8 @@ function addNavBar() {
 		const loginContainer = createWithClasses('div','item')
 			const navLogIn = createWithClasses('div', 'ui', 'button', 'primary')
 			navLogIn.innerText = 'Log In'
-			
+			// navLogIn.addEventListener('click', showLoginForm)
+
 		loginContainer.append(navLogIn)
 
 		rightMenu.append(loginContainer)
