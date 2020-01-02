@@ -169,6 +169,7 @@ function processTripForm(event) {
 	if (!validateTripForm(event.target)) {
 		alert("Please fill out the Trip form before proceeding...")
 	} else {
+		
 		let url = event.target.image.value
 
 		const tripBody = {
@@ -197,6 +198,7 @@ function processTripForm(event) {
 			createNewTrip(tripBody)
 		}
 	}
+
 }
 
 function validateTripForm(form) {
@@ -242,6 +244,7 @@ function getSingleTrip(event) {
 
 function loadTripPage(trip) {  // FETCH source IS getSingleTrip() from TRIP.js
 	console.log("loadTripPage Event Triggered")
+	clearFormBody()
 	createTripHeader(trip)
 	loadAgendaPage(trip)
 }

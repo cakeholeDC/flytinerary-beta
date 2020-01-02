@@ -97,7 +97,7 @@ function addSearchBar() {
 }
 
 function addNavBar() {
-	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'mini', 'borderless')
+	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'huge', 'borderless')
 		const navTitle = createWithClasses('div','header','item')
 		navTitle.innerHTML = "<i class='plane icon'></i>Flytinerary"
 		const navHome = createWithClasses('a', 'item')
