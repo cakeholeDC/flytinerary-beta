@@ -26,7 +26,8 @@ function showLoginForm() {
 	console.log('loading login page...')
 	clearFormBody()
 	clearPageBody()
-	// getHeaderBar().innerHTML = ''
+	document.querySelector('#log-in-btn').disabled = true
+
 	homePageHeader()
 	document.querySelector('#header-content').querySelector('#sub-header-text').style.display = "none"
 	document.querySelector('#header-content').querySelector('#search-container').style.display = "none"
@@ -45,12 +46,12 @@ function showLoginForm() {
 			let userSelect = createWithClasses('select', 'ui', 'form', 'selection', 'dropdown')
 			  userSelect.name = "user"
 
-			// const selectPrefill = document.createElement('option')
-			// selectPrefill.value = ''
-			// selectPrefill.innerText = "Select User"
-			// selectPrefill.disabled = true
-			// selectPrefill.selected = true
-			// userSelect.appendChild(selectPrefill)
+			const selectPrefill = document.createElement('option')
+			selectPrefill.value = ''
+			selectPrefill.innerText = "Select User"
+			selectPrefill.disabled = true
+			selectPrefill.selected = true
+			userSelect.appendChild(selectPrefill)
 
 	fetch(TRAVELLERS_URL)
 		.then(response => {
@@ -71,7 +72,7 @@ function showLoginForm() {
 	userDiv.append(label, userSelect)
 
 	const submit = createWithClasses('button', 'ui','button', 'right','floated', 'positive')
-		submit.innerText = "Switch User"
+		submit.innerText = "Start Planning!"
 
 	loginForm.append(userDiv, submit)
 	loginForm.addEventListener('submit', switchUser)
@@ -80,27 +81,41 @@ function showLoginForm() {
 	document.querySelector('#form-container').style.display = 'block'
 }
 
+function validateUserForm(form) {
+	if (form.user.selectedOptions[0].disabled === true) {
+		return false
+	}
+	else {
+		return true
+	}
+}
+
 function switchUser(event) {
 	event.preventDefault()
 
-	const userID = parseInt(event.target.user.selectedOptions[0].value)
-	const username = (event.target.user.selectedOptions[0].text)
-	SESSION_USER = userID
-	const navLogIn = document.querySelector('#log-in-btn')
-	navLogIn.innerText = `Log Out: ${username}`
-	navLogIn.removeEventListener('click', showLoginForm)
-	navLogIn.addEventListener('click', logOut)
-	loadHomePage()
+	if (!validateUserForm(event.currentTarget)) {
+		alert("You must select a traveller before browsing!")
+	} else {
+		const userID = parseInt(event.target.user.selectedOptions[0].value)
+		const username = (event.target.user.selectedOptions[0].text)
+		SESSION_USER = userID
+		const navLogIn = document.querySelector('#log-in-btn')
+		navLogIn.innerText = `Log Out: ${username}`
+		navLogIn.removeEventListener('click', showLoginForm)
+		navLogIn.addEventListener('click', logOut)
+		document.querySelector('#log-in-btn').disabled = false
+		loadHomePage()
+	}
 }
 
 function logOut(event) {
-	location.reload()
-	// const navLogIn = document.querySelector('#log-in-btn')
-	// navLogIn.removeEventListener('click', logOut)
-	// navLogIn.addEventListener('click', showLoginForm)
-	// navLogIn.innerText = `Log In`
-	// SESSION_USER = null
-	// showLoginForm()
+	// location.reload()
+	const navLogIn = document.querySelector('#log-in-btn')
+	navLogIn.removeEventListener('click', logOut)
+	navLogIn.addEventListener('click', showLoginForm)
+	navLogIn.innerText = `Log In`
+	SESSION_USER = null
+	showLoginForm()
 }
 
 function loadHomePage() {
@@ -225,7 +240,7 @@ function addSearchBar() {
 }
 
 function addNavBar() {
-	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'huge', 'borderless')
+	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'large', 'borderless')
 		const navTitle = createWithClasses('div','header','item')
 		navTitle.innerHTML = "<i class='plane icon'></i>Flytinerary"
 		const navHome = createWithClasses('a', 'item')
@@ -239,7 +254,7 @@ function addNavBar() {
 		const rightMenu = createWithClasses('div','right','menu')
 
 		const loginContainer = createWithClasses('div','item')
-			const navLogIn = createWithClasses('div', 'ui', 'button', 'primary')
+			const navLogIn = createWithClasses('button', 'ui', 'button', 'primary')
 			navLogIn.innerText = 'Log In'
 			navLogIn.id = "log-in-btn"
 			navLogIn.addEventListener('click', showLoginForm)
