@@ -6,8 +6,9 @@ var SESSION_USER = Math.floor(Math.random() * 7) + 1;
 
 document.addEventListener("DOMContentLoaded", function(){
 	console.log("connected")
-	loadHomePage()
 	addNavBar()
+	showLoginForm()
+	// loadHomePage()
 	attachEventListeners()
 })
 
@@ -21,12 +22,83 @@ function getHeaderBar() {
 	return pageHeader
 }
 
-// function showLoginForm() {
-// 	console.log('loading home page...')
-// 	clearFormBody()
-// 	homePageHeader()
-// 	const container = getFormBody()
-// }
+function showLoginForm() {
+	console.log('loading login page...')
+	clearFormBody()
+	clearPageBody()
+	// getHeaderBar().innerHTML = ''
+	// homePageHeader()
+	const container = getFormBody()
+	// container.style.width = "70%"
+	// container.style.marginLeft = "auto"
+	// container.style.marginRight = "auto"
+
+	const loginForm = createWithClasses('form', 'ui','form', 'center', 'aligned')
+
+	const userDiv = createWithClasses('div','field')
+			const label = createWithClasses('label')
+			  label.innerText = "Select a User"
+			
+			let userSelect = createWithClasses('select', 'ui', 'form', 'selection', 'dropdown')
+			  userSelect.name = "user"
+
+			// const selectPrefill = document.createElement('option')
+			// selectPrefill.value = ''
+			// selectPrefill.innerText = "Select User"
+			// selectPrefill.disabled = true
+			// selectPrefill.selected = true
+			// userSelect.appendChild(selectPrefill)
+
+	fetch(TRAVELLERS_URL)
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			}
+		})
+		.then(travellers => {
+			travellers.forEach(traveller =>{
+			  	let option = document.createElement('option')
+			  	option.innerText = traveller.name
+			  	option.value = traveller.id
+			  	userSelect.appendChild(option)
+			})
+		})
+		.catch(error => console.log(error.message))
+
+	userDiv.append(label, userSelect)
+
+	const submit = createWithClasses('button', 'ui','button', 'right','floated', 'positive')
+		submit.innerText = "Switch User"
+
+	loginForm.append(userDiv, submit)
+	loginForm.addEventListener('submit', switchUser)
+
+	container.append(loginForm)
+	document.querySelector('#form-container').style.display = 'block'
+}
+
+function switchUser(event) {
+	event.preventDefault()
+
+	const userID = parseInt(event.target.user.selectedOptions[0].value)
+	const username = (event.target.user.selectedOptions[0].text)
+	SESSION_USER = userID
+	const navLogIn = document.querySelector('#log-in-btn')
+	navLogIn.innerText = `Log Out: ${username}`
+	navLogIn.removeEventListener('click', showLoginForm)
+	navLogIn.addEventListener('click', logOut)
+	loadHomePage()
+}
+
+function logOut(event) {
+	location.reload()
+	// const navLogIn = document.querySelector('#log-in-btn')
+	// navLogIn.removeEventListener('click', logOut)
+	// navLogIn.addEventListener('click', showLoginForm)
+	// navLogIn.innerText = `Log In`
+	// SESSION_USER = null
+	// showLoginForm()
+}
 
 function loadHomePage() {
 	console.log('loading home page...')
@@ -164,7 +236,8 @@ function addNavBar() {
 		const loginContainer = createWithClasses('div','item')
 			const navLogIn = createWithClasses('div', 'ui', 'button', 'primary')
 			navLogIn.innerText = 'Log In'
-			// navLogIn.addEventListener('click', showLoginForm)
+			navLogIn.id = "log-in-btn"
+			navLogIn.addEventListener('click', showLoginForm)
 
 		loginContainer.append(navLogIn)
 
