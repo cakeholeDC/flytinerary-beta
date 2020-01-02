@@ -39,14 +39,14 @@ function loadAboutPage() {
 	aboutHeader.innerText = "About Flytinerary"
 
 	const aboutContent = createWithClasses('p','content')
-	aboutContent.innerHTML = `Flytinerary is a travel planning app created by <a target="_blank" href="https://www.kylepcole.com/">Kyle Cole</a> as part of the <a target="_blank" href="https://flatironschool.com/career-courses/coding-bootcamp">Flatiron School's Software Engineering Immersive Bootcamp</a>
+	aboutContent.innerHTML = `Flytinerary is a travel itinerary planning appication created by <a target="_blank" href="https://www.kylepcole.com/">Kyle Cole</a> as part of the <a target="_blank" href="https://flatironschool.com/career-courses/coding-bootcamp">Flatiron School's Software Engineering Immersive Bootcamp</a>
 					<br><br>Use the field at the top of the page to start planning a trip. Once a trip has been created, you will be able to manage events for that trip.`
 
 
 	const license = createWithClasses('div', 'content', 'left', 'aligned')
 	license.innerText = `MIT License
 
-	Copyright (c) 2020 Kyle P Cole
+	Copyright (c) 2020 Kyle P. Cole
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -157,6 +157,7 @@ function addNavBar() {
 		const loginContainer = createWithClasses('div','item')
 			const navLogIn = createWithClasses('div', 'ui', 'button', 'primary')
 			navLogIn.innerText = 'Log In'
+			
 		loginContainer.append(navLogIn)
 
 		rightMenu.append(loginContainer)

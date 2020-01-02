@@ -1,5 +1,5 @@
 # Flytinerary
-Flytinerary is a travel planning app created by [Kyle Cole](https://www.kylepcole.com/) as part of the [Flatiron School's Software Engineering Immersive Bootcamp](https://flatironschool.com/career-courses/coding-bootcamp)
+Flytinerary is a travel itinerary planning appication created by [Kyle Cole](https://www.kylepcole.com/) as part of the [Flatiron School's Software Engineering Immersive Bootcamp](https://flatironschool.com/career-courses/coding-bootcamp)
 
 #Version
 Flytinerary v1.0.0
@@ -10,7 +10,7 @@ Use the field at the top of the page to start planning a trip. Once a trip has b
 #License
 MIT License
 
-Copyright (c) 2020 Kyle P Cole
+Copyright (c) 2020 Kyle P. Cole
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
