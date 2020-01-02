@@ -7,7 +7,6 @@ function loadEventPage(event) {
 
 //@TODO rename to EVENT data, find references
 function getEventData(trip_id) {
-	
 	fetch(`${TRIPS_URL}/${trip_id}`)
 		.then(response => {
 			if (response.ok) {
@@ -19,17 +18,6 @@ function getEventData(trip_id) {
 		})
 		.catch(error => console.log(error.message))
 }
-
-// function getSingleEventInfo(event_id) {
-// 	fetch(`${EVENTS_URL}/${event_id}`)
-// 		.then(response => {
-// 			if (response.ok) {
-// 				return response.json()
-// 			}
-// 		})
-// 		.then(eventData => console.log(event.data))
-// 		.catch(error => console.log(error.message))
-// }
 
 function loadAgendaPage(trip) {
 	const mainContainer = clearPageBody()
@@ -137,6 +125,9 @@ function editEvent(event) {
 	const dataID = event.currentTarget.dataset.id.split('-')[1]
 
 	buildNewEventForm(event)
+
+	//form title
+	document.querySelector('#form-body').querySelector('#event-form-header').innerText = "It's ok, we all change plans."
 
 	//submit actions
 	getEventForm().querySelector('button').innerText = "Update Flytinerary"
@@ -246,13 +237,11 @@ function deleteEvent(event) {
 		.then(response => {
 			if (response.ok) {
 				console.log('deleted')
+				clearFormBody()
+				getEventData(tripID)
 			}
 		})
 		.catch(error => console.log(error.message))
-
-	clearFormBody()
-	getEventData(tripID)
-
 }
 
 function getEventForm() {
@@ -261,6 +250,8 @@ function getEventForm() {
 }
 
 function buildNewEventForm(event) {
+	clearFormBody()
+	document.querySelector('#edit-trip-button').disabled = false;
 	console.log("Adding Event Form")
 	document.querySelector("#add-event-btn").style.display = "none"
 

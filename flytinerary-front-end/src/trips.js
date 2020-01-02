@@ -92,6 +92,7 @@ function showNewTripForm(event) {
 }
 
 function createTripForm(search) {
+	clearFormBody()
 	const mainContainer = getPageBody()
 
 	// mainContainer.classList.remove('left', 'aligned', 'column')
@@ -346,7 +347,7 @@ function editTrip(event) {
 	getFormBody().querySelector('h2.ui.header').innerText = "It's ok, we all change plans."
 	getFormBody().querySelector('#new-trip-form button').innerText = "Reschedule Trip"
 
-	let cancelTripBtn = getPageBody().querySelector('#cancel-trip-button')
+	let cancelTripBtn = getFormBody().querySelector('#cancel-trip-button')
 	cancelTripBtn.innerText = "Nevermind, this trip looks too fun!"
 
 	const tripForm = document.querySelector('#new-trip-form')
