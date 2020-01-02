@@ -1,10 +1,9 @@
 function getTrips() {
+	console.log('getting trips...')
 	fetch(TRIPS_URL)
 		.then(response => {
 			if (response.ok) {
 				return response.json()
-			} else {
-				console.log("Fetch failed...")
 			}
 		})
 		.then(trips => {
@@ -262,6 +261,7 @@ function setTripBackground(url) {
 function createTripHeader(trip) {
 	setTripBackground(trip.image)
 	const headerText = getHeaderBar().querySelector("#header-text")
+	headerText.dataset.trip = trip.id
 	headerText.innerText = trip.nickname
 	const subHead = getHeaderBar().querySelector('#sub-header-text')
 	subHead.innerHTML = `${trip.destination}<p>${formatDate(trip.start_date)} — ${formatDate(trip.end_date)}</p>`

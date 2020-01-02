@@ -7,6 +7,7 @@ function loadEventPage(event) {
 
 //@TODO rename to EVENT data, find references
 function getEventData(trip_id) {
+	
 	fetch(`${TRIPS_URL}/${trip_id}`)
 		.then(response => {
 			if (response.ok) {
@@ -97,6 +98,7 @@ function buildAgendaTimeline(trip) {
 			// then list event details
 			const eventDetails = createWithClasses('ul', 'list', 'event-hover')
 				const eventDesc = createWithClasses('li', 'item','event-hover')
+				
 				eventDesc.dataset.id = `event-${event.id}`
 				eventDesc.innerText = `${event.description} `
 				eventDesc.addEventListener('mouseenter', toggleEditIcon)
@@ -133,32 +135,31 @@ function editEvent(event) {
 	event.currentTarget.removeEventListener('mouseleave', toggleEditIcon)
 
 	const dataID = event.currentTarget.dataset.id.split('-')[1]
-	//@TODO add these back after form processing
 
 	buildNewEventForm(event)
-	//@TODO add DELETE button.
 
 	//submit actions
 	getEventForm().querySelector('button').innerText = "Update Flytinerary"
 	getEventForm().removeEventListener('submit', processNewEvent)
 	getEventForm().addEventListener('submit', processEditEvent)
+	
 	//cancel actions
 	const cancelBtn = getEventForm().querySelector('a')
 	cancelBtn.classList.remove('negative','left','floated')
 	cancelBtn.classList.add('right','floated')
 	cancelBtn.innerText = "Nevermind"
-
-
+	
 	//delete actions
 	const deleteBtn = createWithClasses('div','ui', 'button', 'negative','left', 'floated')
 	deleteBtn.innerText = "Remove Event"
 	deleteBtn.addEventListener('click', deleteEvent)
+	
 	deleteBtn.id = `event-${dataID}-delete`
 	deleteBtn.dataset.trip = `event-${getEventForm().dataset.id.split('-')[1]}`
 	getEventForm().append(deleteBtn)
 
 	const eventID = event.currentTarget.dataset.id.split('-')[1]
-	debugger
+	
 	const time = getPageBody().querySelector(`#event-${eventID}-datetime`).innerText.split('\n')[0]
 	const startTime = time.split('-')[0].trim()
 	const endTime = time.split('-')[1].trim()
@@ -169,8 +170,6 @@ function editEvent(event) {
 	const description = domEventContent.split(":")[1].trim()
 	const traveller = domEventContent.split('-')[1].split(":")[0].trim()
 	const eventType = domEventContent.split('-')[0].trim()
-	// const start = ''
-	// const end = ''
 
 	const formTraveller = getEventForm().querySelector('input[name="traveller_id"]')
 	formTraveller.value = traveller
@@ -194,16 +193,15 @@ function editEvent(event) {
 }
 
 function processEditEvent(event) {
-	// body...
 	event.preventDefault()
 	console.log('processEditEvent')
-	//@ TODO add JS form validator 
-
+	
 	if (!validateEventForm(event.target)) {
 		alert("That was required last time... you think we'd let you leave it out now?")
 	} else {
-		const formID = event.target.dataset.id
-		const tripID = Number(formID.split('-')[1])
+		const formID = event.target.dataset.id // TRACE THIS BACK
+		const tripID = document.querySelector('#header-text').dataset.trip
+		const eventID = formID.split('-')[1]
 
 		const editEventBody = {
 			event_type: event.target.event_type.selectedOptions[0].text,
@@ -217,44 +215,43 @@ function processEditEvent(event) {
 
 		const eventConfig = fetchConfig(editEventBody, "PATCH")
 
-		fetch(EVENTS_URL, eventConfig)
+		fetch(`${EVENTS_URL}/${eventID}`, eventConfig)
 			.then(response => {
 				if (response.ok){
 					return response.json()
 				}
 			})
 			.then(event => {
-				getEventData(event.trip_id)
+				getEventData(event.trip.id)
 			})
 			.catch(error => console.log(`!${error.message}!`))
-		// body...
 
+		clearFormBody()
 		const createEventBtn = document.querySelector("#add-event-btn")
 		createEventBtn.style.display = "inline-block"
 		createEventBtn.classList.add('right')
 		createEventBtn.classList.remove('center')
 
 	}
-
 	event.currentTarget.addEventListener('mouseenter', toggleEditIcon)
 	event.currentTarget.addEventListener('mouseleave', toggleEditIcon)
-	clearFormBody()
 }
 
 function deleteEvent(event) {
-	// body...
-	const dataID = event.currentTarget.dataset.id.split('-')[1]
-	const tripID = event.currentTarget.dataset.trip.split('-')[1]
+	const eventID = event.currentTarget.id.split('-')[1]
+	const tripID = document.querySelector('#header-text').dataset.trip
 	const deleteConfig = fetchConfig('', 'DELETE')
 
-	fetch(`${EVENTS_URL}/${dataID}`,deleteConfig)
+	fetch(`${EVENTS_URL}/${eventID}`,deleteConfig)
 		.then(response => {
 			if (response.ok) {
-				debugger
-				loadEventPage(event)
+				console.log('deleted')
 			}
 		})
 		.catch(error => console.log(error.message))
+
+	clearFormBody()
+	getEventData(tripID)
 
 }
 
@@ -359,13 +356,11 @@ function cancelForm(event) {
 	createEventBtn.classList.add('right')
 	createEventBtn.classList.remove('center')
 	clearFormBody()
-	// document.querySelector('#event-form-header').remove()
 }
 
 function processNewEvent(event) {
 	event.preventDefault()
 	console.log('processNewEvent')
-	//@ TODO add JS form validator 
 
 	if (!validateEventForm(event.target)) {
 		alert("Please fill out the Event form before proceeding...")
@@ -423,5 +418,4 @@ function createNewEvent(body) {
 			getEventData(event.trip_id)
 		})
 		.catch(error => console.log(`!!!${error.message}`))
-	// body...
 }
