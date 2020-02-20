@@ -1,5 +1,5 @@
 # Flytinerary
-Flytinerary is a travel itinerary planning appication created by [Kyle Cole](https://www.kylepcole.com/) as part of the [Flatiron School's Software Engineering Immersive Bootcamp](https://flatironschool.com/career-courses/coding-bootcamp)
+Flytinerary is a group itinerary planning appication. Plan a trip, invite your friends, and keep track of everyone's arrivals, departures, reservations, and check-in times. 
 
 ## Version
 Flytinerary v1.0.0
