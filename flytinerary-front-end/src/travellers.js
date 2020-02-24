@@ -21,6 +21,9 @@ function showLoginForm() {
 	clearPageBody()
 	document.querySelector('#log-in-btn').disabled = true
 
+	// navHome.addEventListener('click', loadHomePage)
+	// navAbout.addEventListener('click', loadAboutPage)
+
 	homePageHeader()
 	document.querySelector('#header-content').querySelector('#sub-header-text').style.display = "none"
 	document.querySelector('#header-content').querySelector('#search-container').style.display = "none"
@@ -129,6 +132,8 @@ function showNewTravellerForm() {
 	document.querySelector('#header-content').querySelector('#search-container').style.display = "none"
 	
 	const container = getFormBody()
+	const label = createWithClasses('div','ui','large','header')
+			  label.innerText = "Who are you?"
 
 	const signUpForm = createWithClasses('form', 'ui','form', 'center', 'aligned')
 	signUpForm.id = "new-traveller-form"
@@ -156,7 +161,7 @@ function showNewTravellerForm() {
 	signUpForm.append(userDiv, ageDiv, genderDiv, submit)
 	signUpForm.addEventListener('submit', processNewTravellerForm)
 
-	container.append(signUpForm)
+	container.append(label, signUpForm)
 	document.querySelector('#form-container').style.display = 'block'
 }
 

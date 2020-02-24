@@ -2,7 +2,8 @@ const BASE_URL = 'http://localhost:3000'
 const TRIPS_URL = `${BASE_URL}/trips`
 const TRAVELLERS_URL = `${BASE_URL}/travellers`
 const EVENTS_URL = `${BASE_URL}/events`
-var SESSION_USER = Math.floor(Math.random() * 7) + 1;
+// var SESSION_USER = Math.floor(Math.random() * 7) + 1;
+var SESSION_USER = null;
 
 document.addEventListener("DOMContentLoaded", function(){
 	console.log("connected")
@@ -145,13 +146,14 @@ function addSearchBar() {
 
 function addNavBar() {
 	const navBar = createWithClasses('div', 'ui', 'menu', 'inverted', 'large', 'borderless')
+	navBar.id = "nav-bar"
 		const navTitle = createWithClasses('div','header','item')
 		navTitle.innerHTML = "<i class='plane icon'></i>Flytinerary"
-		const navHome = createWithClasses('a', 'item')
+		const navHome = createWithClasses('a', 'item', 'to-hide')
 		navHome.addEventListener('click', loadHomePage)
 		navHome.innerText = 'Home'
 
-		const navAbout = createWithClasses('a','item')
+		const navAbout = createWithClasses('a','item', 'to-hide')
 		navAbout.innerText = "About"
 		navAbout.addEventListener('click', loadAboutPage)
 
